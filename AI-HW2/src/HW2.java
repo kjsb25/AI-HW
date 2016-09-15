@@ -27,14 +27,14 @@ public class HW2 {
 		Instance1[3][1].setClean(false);
 		Instance1[3][3].setClean(false);
 
-//		ArrayList<Room> ids_result=IDS(Instance1,3,2);
-//		if(ids_result==null){
-//			System.out.print("No IDS Solution found");
-//		}else{
-//			for(Room room: ids_result){
-//				System.out.println(room.toString());
-//			}
-//		}
+		ArrayList<Room> ids_result=IDS(Instance1,3,2);
+		if(ids_result==null){
+			System.out.print("No IDS Solution found");
+		}else{
+			for(Room room: ids_result){
+				System.out.println(room.toString());
+			}
+		}
 		printRooms(Instance1);
 		
 	}
