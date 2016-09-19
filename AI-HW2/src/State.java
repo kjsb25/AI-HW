@@ -30,7 +30,7 @@ public class State {
 		this.layout = layout;
 	}
 	
-	public static void printRooms(){
+	public void printRooms(){
 		System.out.println("Room:");
 		for(int i=0;i<maxX;i++){
 			for(int j=0;j<maxY;j++){
