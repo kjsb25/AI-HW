@@ -89,23 +89,25 @@ public class HW2 {
 		}
 		//check if depth has been reached
 		if(currDepth==max_depth){
+			System.out.print("Max depth");
 			return null;
 		}
 		//find neighbors, and run dfs on each
 		ArrayList<Room> validneighbors=getUnvisitedNeighbors(rooms,visited,currX,currY,instancex,instancey);
-		if(validneighbors!=null){
+		if(!validneighbors.isEmpty()){
+			System.out.print("Valid Neighbors Exist");
+			System.out.println(validneighbors);
 			for(Room room: validneighbors){
 				ArrayList<Room> hold=recursiveDFS(rooms,visited,room.getX(),room.getY(),currDepth+1,max_depth);
 				if(hold!=null){
-					
 					hold.add(rooms[currX][currY]);
-					return hold;
-					
-					
+					return hold;			
 				}
 			}
+		}else{
+			System.out.print("No valid Neighbors");
 		}
-
+		System.out.print("Failed node");
 		return null;
 	}
 	
@@ -113,18 +115,24 @@ public class HW2 {
 		ArrayList<Room> out=new ArrayList<Room>();
 			
 		if(x-1>=0 && !visited[x-1][y]){
+			System.out.print("Left");
 			out.add(instance[x-1][y]);
 		}
 		if(y-1>=0 && !visited[x][y-1]){
+			System.out.print("Down");
 			out.add(instance[x][y-1]);
 		}
 		if(x+1<ySize  && !visited[x][y+1]){
+			System.out.print("Up");
 			out.add(instance[x][y+1]);
 		}
 		if(x+1<xSize && !visited[x+1][y]){
+			System.out.print("Right");
 			out.add(instance[x+1][y]);
 		}
-		
+		for(Room room: out){
+			System.out.print(room.toString());
+		}
 		return out;
 	}
 	
