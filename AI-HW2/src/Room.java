@@ -4,7 +4,6 @@ public class Room {
 	int x;
 	int y;
 	private Boolean clean=true;
-	
 
 	public Room(int x, int y, Boolean clean) {
 		super();

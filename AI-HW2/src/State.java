@@ -1,19 +1,21 @@
 
-public class Node {
-	Room[][] state;
-	int vacuumX;
-	int vacuumY;
-	public Node(Room[][] state, int vacuumX, int vacuumY) {
+public class State {
+	private Room[][] layout;
+	private int vacuumX;
+	private int vacuumY;
+	
+	
+	public State(Room[][] layout, int vacuumX, int vacuumY) {
 		super();
-		this.state = state;
+		this.layout = layout;
 		this.vacuumX = vacuumX;
 		this.vacuumY = vacuumY;
 	}
-	public Room[][] getState() {
-		return state;
+	public Room[][] getLayout() {
+		return layout;
 	}
-	public void setState(Room[][] state) {
-		this.state = state;
+	public void setLayout(Room[][] layout) {
+		this.layout = layout;
 	}
 	public int getVacuumX() {
 		return vacuumX;
@@ -27,6 +29,4 @@ public class Node {
 	public void setVacuumY(int vacuumY) {
 		this.vacuumY = vacuumY;
 	}
-	
-	
 }

@@ -1,4 +1,4 @@
-
+//May not need this actually, probably going to pass the dirty rooms through the states
 public class DirtyIndex {
 	int x=0;
 	int y=0;
