@@ -1,9 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.SingleGraph;
-
 public class HW2 {
 	
 	
@@ -54,39 +51,32 @@ public class HW2 {
 		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
 		
 		
-		long startTimeIDS2=System.nanoTime();
-		ArrayList<String> path2=IDS(instance2);
-		long endTimeIDS2=System.nanoTime();
-		if(!path2.isEmpty()){
-			System.out.println("Path:");
-			for(String s: path2){
-				System.out.println(s);
-			}
-		}else{
-			System.out.println("No Path Found");
-		}
-		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
+//		long startTimeIDS2=System.nanoTime();
+//		ArrayList<String> path2=IDS(instance2);
+//		long endTimeIDS2=System.nanoTime();
+//		if(!path2.isEmpty()){
+//			System.out.println("Path:");
+//			for(String s: path2){
+//				System.out.println(s);
+//			}
+//		}else{
+//			System.out.println("No Path Found");
+//		}
+//		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
 		
 		
 	}
 	
 	public static ArrayList<String> IDS(State instance){
-		int maxDepth=0;
+		int maxDepth=1;
 		int programLimit=20;
 		
 		ArrayList<String> path=new ArrayList<String>();
 		boolean done=false;
 		while(maxDepth<programLimit && !done){
 			ArrayList<String> expanded=new ArrayList<String>();
-			Graph graph = new SingleGraph("Instance 1");
-			//TODO Remove before sending, only for visualization
-			graph.addAttribute("ui.stylesheet", "url('file:///C:/Users/Koonan/OneDrive/GIT/AI-HW/AI-HW2/lib/style.css')");
-			graph.addNode("1");
-			Node root=graph.getNode("1");
-			root.addAttribute("state", instance);
-			// root.addAttribute("ui.label", ("Root "+instance.getVacuumX()+","+instance.getVacuumY()));
-			root.addAttribute("ui.class", "root");
-			path=depthLimitedSearch(root,path,expanded,0,maxDepth);
+			Tree<State> graph=new Tree<State>(instance);
+			path=depthLimitedSearch(graph.getRoot(),path,expanded,0,maxDepth);
 			if(path.isEmpty()){
 				System.out.println("Depth of "+maxDepth+" failed");
 				maxDepth++;
@@ -108,9 +98,9 @@ public class HW2 {
 		
 	}
 	
-	public static ArrayList<String> depthLimitedSearch(Node currNode,ArrayList<String> path,ArrayList<String> expanded,int currDepth,int depthLimit){
+	public static ArrayList<String> depthLimitedSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<String> expanded,int currDepth,int depthLimit){
 		//pull in current node's state
-		State currState=(State)currNode.getAttribute("state");
+		State currState=currNode.getData();
 		//check if goal is achieved
 		if(currState.getNumDirty()==0){
 			//add current action to list, and return. Checks if it's the root first though.
@@ -124,7 +114,8 @@ public class HW2 {
 			return path;
 		}
 		int pathLength=path.size();
-		for(Node hold: getChildrenNodes(currNode,expanded)){
+		getChildrenNodes(currNode,expanded);
+		for(Tree.Node<State> hold: currNode.getChildren()){
 			path=depthLimitedSearch(hold, path, expanded,currDepth+1, depthLimit);
 			if(pathLength!=path.size()){
 				return path;
@@ -133,26 +124,17 @@ public class HW2 {
 		return path;
 	}
 	
-	public static ArrayList<Node> getChildrenNodes(Node parent,ArrayList<String> expanded){
-		ArrayList<Node> out=new ArrayList<Node>();
-		State currState=(State)parent.getAttribute("state");
-		Random randgen=new Random();
+	public static void getChildrenNodes(Tree.Node<State> parent,ArrayList<String> expanded){
+		State currState=parent.getData();
 		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
-		//Also, hurray for this terrible block of code that should be split up and put elsewhere
 		if(currState.isActionValid("Up")){
 			//create new state to save change, and apply change
 			State UpState=new State(currState);
 			UpState.setVacuumX(currState.getVacuumX()-1);
 			
 			//add node with state to graph
-			Node UpNode=parent.getGraph().addNode(UpState.toString()+randgen.nextInt());
-			UpNode.addAttribute("state", UpState);
-			// UpNode.addAttribute("ui.label", ("UP "+UpState.getVacuumX()+","+UpState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+UpNode.getId(), parent, UpNode);
-			
-			//add node to output
-			out.add(UpNode);
-			
+			parent.addChild(UpState);
+
 			expanded.add("UP "+UpState.getVacuumX()+","+UpState.getVacuumY());
 		}
 		if(currState.isActionValid("Left")){
@@ -161,50 +143,40 @@ public class HW2 {
 			LeftState.setVacuumY(currState.getVacuumY()-1);
 			
 			//add node with state to graph
-			Node LeftNode=parent.getGraph().addNode(LeftState.toString()+randgen.nextInt());
-			LeftNode.addAttribute("state", LeftState);
-			// LeftNode.addAttribute("ui.label", ("Left "+LeftState.getVacuumX()+","+LeftState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+LeftNode.getId(), parent, LeftNode);
-			
-			//add node to output
-			out.add(LeftNode);
+			parent.addChild(LeftState);
 			
 			expanded.add("Left "+LeftState.getVacuumX()+","+LeftState.getVacuumY());
 		}
 		if(currState.isActionValid("Suck")){
+			//create new state to save changes, and change
 			State SuckState=new State(currState);
 			SuckState.CleanCurrRoom();
-			Node SuckNode=parent.getGraph().addNode(SuckState.toString()+randgen.nextInt());
-			SuckNode.addAttribute("state", SuckState);
-			// SuckNode.addAttribute("ui.label", ("Suck "+SuckState.getVacuumX()+","+SuckState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+SuckNode.getId(), parent, SuckNode);
-			out.add(SuckNode);
+			
+			//add node with state to the graph
+			parent.addChild(SuckState);
 			
 			expanded.add("Suck "+SuckState.getVacuumX()+","+SuckState.getVacuumY());
 		}
 		if(currState.isActionValid("Right")){
+			//create new state to save changes, and change
 			State RightState=new State(currState);
 			RightState.setVacuumY(currState.getVacuumY()+1);
-			Node RightNode=parent.getGraph().addNode(RightState.toString()+randgen.nextInt());
-			RightNode.addAttribute("state", RightState);
-			// RightNode.addAttribute("ui.label", ("Right "+RightState.getVacuumX()+","+RightState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+RightNode.getId(), parent, RightNode);
-			out.add(RightNode);
+			
+			//add node with state to the graph
+			parent.addChild(RightState);
 			
 			expanded.add("Right "+RightState.getVacuumX()+","+RightState.getVacuumY());
 		}
 		if(currState.isActionValid("Down")){
+			//create new state to save changes, and change
 			State DownState=new State(currState);
 			DownState.setVacuumX(currState.getVacuumX()+1);
-			Node DownNode=parent.getGraph().addNode(DownState.toString()+randgen.nextInt());
-			DownNode.addAttribute("state", DownState);
-			// DownNode.addAttribute("ui.label", ("Down "+DownState.getVacuumX()+","+DownState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+DownNode.getId(), parent, DownNode);
-			out.add(DownNode);
+			
+			//add node with state to the graph
+			parent.addChild(DownState);
 			
 			expanded.add("Down "+DownState.getVacuumX()+","+DownState.getVacuumY());
 		}
-		return out;
 	}
 }
 
