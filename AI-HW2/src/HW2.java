@@ -51,25 +51,25 @@ public class HW2 {
 		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
 		
 		
-//		long startTimeIDS2=System.nanoTime();
-//		ArrayList<String> path2=IDS(instance2);
-//		long endTimeIDS2=System.nanoTime();
-//		if(!path2.isEmpty()){
-//			System.out.println("Path:");
-//			for(String s: path2){
-//				System.out.println(s);
-//			}
-//		}else{
-//			System.out.println("No Path Found");
-//		}
-//		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
+		long startTimeIDS2=System.nanoTime();
+		ArrayList<String> path2=IDS(instance2);
+		long endTimeIDS2=System.nanoTime();
+		if(!path2.isEmpty()){
+			System.out.println("Path:");
+			for(String s: path2){
+				System.out.println(s);
+			}
+		}else{
+			System.out.println("No Path Found");
+		}
+		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
 		
 		
 	}
 	
 	public static ArrayList<String> IDS(State instance){
 		int maxDepth=1;
-		int programLimit=20;
+		int programLimit=10;
 		
 		ArrayList<String> path=new ArrayList<String>();
 		boolean done=false;
