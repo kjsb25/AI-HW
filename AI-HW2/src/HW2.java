@@ -3,8 +3,6 @@ import java.util.Random;
 
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.view.Viewer;
-import org.graphstream.ui.layout.Layouts;
 
 public class HW2 {
 	
@@ -23,8 +21,14 @@ public class HW2 {
 		State instance1=new State(4,4,dirty,3,2, "");
 
 		ArrayList<String> path=IDS(instance1);
-		
-
+		if(!path.isEmpty()){
+			System.out.println("Path:");
+			for(String s: path){
+				System.out.println(s);
+			}
+		}else{
+			System.out.println("No Path Found");
+		}
 
 		
 		
@@ -34,7 +38,7 @@ public class HW2 {
 	public static ArrayList<String> IDS(State instance){
 		int maxDepth=0;
 		ArrayList<String> path=new ArrayList<String>();
-		while(maxDepth<5){
+		while(maxDepth<20){
 			Graph graph = new SingleGraph("Instance 1");
 			//TODO Remove before sending, only for visualization
 			graph.addAttribute("ui.stylesheet", "url('file:///C:/Users/Koonan/OneDrive/GIT/AI-HW/AI-HW2/lib/style.css')");
@@ -48,10 +52,7 @@ public class HW2 {
 			//TODO add logic to check if valid
 			
 			maxDepth++;
-			if(maxDepth==5){
-				Viewer viewer=graph.display(false);
-				HierarchicalLayout h1=new HierarchicalLayout();
-			}
+			//graph.display();
 		}
 		return path;
 		
@@ -103,6 +104,7 @@ public class HW2 {
 			out.add(UpNode);
 		}
 		if(currState.isActionValid("Left")){
+//			System.out.println("Valid Node: ("+currState.getVacuumX()+","+(currState.getVacuumY()-1)+")");
 			State LeftState=new State(currState);
 			LeftState.setVacuumY(currState.getVacuumY()-1);
 			//may be id overlap here.

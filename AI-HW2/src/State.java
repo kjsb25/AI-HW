@@ -64,23 +64,24 @@ public class State implements Cloneable{
 	//TODO RECHECK ALL OF THIS, THIS SHIT IS IMPORTANT. 
 	public boolean isActionValid(String action){
 		if(action=="Left"){
-			if(vacuumX-1>=0){
+			if(vacuumY-1>=0){
 				return true;
-			}else
+			}else{
 				return false;
+			}
 		}else if(action=="Right"){
-			if(vacuumX+1<=maxX){
+			if(vacuumY+1<maxY){
 				return true;
 			}else
 				return false;
 		}else if(action=="Down"){
 			//TODO is this right?
-			if(vacuumY+1<=maxY){
+			if(vacuumX+1<maxX){
 				return true;
 			}else
 				return false;
 		}else if(action=="Up"){
-			if(vacuumY-1>=0){
+			if(vacuumX-1>=0){
 				return true;
 			}else
 				return false;
