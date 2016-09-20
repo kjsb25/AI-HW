@@ -8,13 +8,13 @@
 //
 //	 public Tree(State rootData) {
 //	        root = new Node<State>(rootData);
-//	        root.children = new ArrayList<Tree<State>>();
+//	        root.children = new ArrayList<Node<State>>();
 //	}
 //
 //    public static class Node<State> {
 //        private State data;
-//        private Tree<State> parent;
-//        private List<Tree<State>> children;
+//        private Node<State> parent;
+//        private List<Node<State>> children;
 //
 //        /*IMPORTANT: READ IF DEBUGGING
 //         * ALL FUNCTIONS UNDER THIS POINT ARE CURRENTLY UNTESTED AND WERE QUICK HASHUPS
@@ -38,7 +38,7 @@
 //        }
 //        
 //        public void addChild(State data) {
-//            Node<T> child = new Node<State>(data);
+//            Node<State> child = new Node<State>(data);
 //            child.setParent(this);
 //            this.children.add(child);
 //        }

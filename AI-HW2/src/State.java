@@ -17,9 +17,9 @@ public class State implements Cloneable{
 		this.maxY = maxY;
 		this.vacuumX = vacuumX-1;
 		this.vacuumY = vacuumY-1;
-		System.out.println(this.vacuumX+","+this.vacuumY);
 	}
 	
+	//Constructor used to duplicate a previous state
 	public State(State original){
 		this.layout=original.getLayout();
 		this.predecessorAction = original.getPredecessorAction();
