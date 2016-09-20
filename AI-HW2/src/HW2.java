@@ -1,6 +1,10 @@
 import java.util.ArrayList;
+import java.util.Random;
+
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.layout.Layouts;
 
 public class HW2 {
 	
@@ -8,21 +12,20 @@ public class HW2 {
 	public static void main(String[] args) {
 		
 		ArrayList<DirtyIndex> dirty=new ArrayList<DirtyIndex>();
-		dirty.add(new DirtyIndex(0,1));
-		dirty.add(new DirtyIndex(0,3));
-		dirty.add(new DirtyIndex(1,1));
 		dirty.add(new DirtyIndex(1,2));
-		dirty.add(new DirtyIndex(2,0));
+		dirty.add(new DirtyIndex(1,4));
+		dirty.add(new DirtyIndex(2,2));
+		dirty.add(new DirtyIndex(2,3));
 		dirty.add(new DirtyIndex(3,1));
-		dirty.add(new DirtyIndex(3,3));
+		dirty.add(new DirtyIndex(4,2));
+		dirty.add(new DirtyIndex(4,4));
 		
 		State instance1=new State(4,4,dirty,3,2, "");
-		
 
-		
 		ArrayList<String> path=IDS(instance1);
 		
-		System.out.println(instance1.printRooms());
+
+
 		
 		
 	}
@@ -31,19 +34,26 @@ public class HW2 {
 	public static ArrayList<String> IDS(State instance){
 		int maxDepth=0;
 		ArrayList<String> path=new ArrayList<String>();
-		while(true){
+		while(maxDepth<5){
 			Graph graph = new SingleGraph("Instance 1");
 			//TODO Remove before sending, only for visualization
 			graph.addAttribute("ui.stylesheet", "url('file:///C:/Users/Koonan/OneDrive/GIT/AI-HW/AI-HW2/lib/style.css')");
 			graph.addNode("1");
-			Node root=graph.getNode(1);
+			Node root=graph.getNode("1");
 			root.addAttribute("state", instance);
+			root.addAttribute("ui.label", ("Root "+instance.getVacuumX()+","+instance.getVacuumY()));
+			root.addAttribute("ui.class", "root");
 			path=depthLimitedSearch(root,path,0,maxDepth);
-			graph.display();
+			
 			//TODO add logic to check if valid
 			
 			maxDepth++;
+			if(maxDepth==5){
+				Viewer viewer=graph.display(false);
+				HierarchicalLayout h1=new HierarchicalLayout();
+			}
 		}
+		return path;
 		
 		
 	}
@@ -63,7 +73,14 @@ public class HW2 {
 			//returning the same list that was input is regarded as a failure
 			return path;
 		}
-		//evaluate each successor
+		int pathLength=path.size();
+		for(Node hold: getChildrenNodes(currNode)){
+			path=depthLimitedSearch(hold, path, currDepth+1, depthLimit);
+			if(pathLength!=path.size()){
+				return path;
+			}
+		}
+		
 		
 		
 		return path;
@@ -72,139 +89,60 @@ public class HW2 {
 	public static ArrayList<Node> getChildrenNodes(Node parent){
 		ArrayList<Node> out=new ArrayList<Node>();
 		State currState=(State)parent.getAttribute("state");
-		
+		Random randgen=new Random();
 		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
+		//Also, hurray for this terrible block of code that should be split up and put elsewhere
 		if(currState.isActionValid("Up")){
-			
+			State UpState=new State(currState);
+			UpState.setVacuumX(currState.getVacuumX()-1);
+			//may be id overlap here.
+			Node UpNode=parent.getGraph().addNode(UpState.toString()+randgen.nextInt());
+			UpNode.addAttribute("state", UpState);
+			UpNode.addAttribute("ui.label", ("UP "+UpState.getVacuumX()+","+UpState.getVacuumY()));
+			parent.getGraph().addEdge(parent.getId()+"->"+UpNode.getId(), parent, UpNode);
+			out.add(UpNode);
 		}
 		if(currState.isActionValid("Left")){
-
+			State LeftState=new State(currState);
+			LeftState.setVacuumY(currState.getVacuumY()-1);
+			//may be id overlap here.
+			Node LeftNode=parent.getGraph().addNode(LeftState.toString()+randgen.nextInt());
+			LeftNode.addAttribute("state", LeftState);
+			LeftNode.addAttribute("ui.label", ("Left "+LeftState.getVacuumX()+","+LeftState.getVacuumY()));
+			parent.getGraph().addEdge(parent.getId()+"->"+LeftNode.getId(), parent, LeftNode);
+			out.add(LeftNode);
 		}
 		if(currState.isActionValid("Suck")){
-
-		}
-		if(currState.isActionValid("Down")){
-
+			State SuckState=new State(currState);
+			SuckState.CleanCurrRoom();
+			//may be id overlap here.
+			Node SuckNode=parent.getGraph().addNode(SuckState.toString()+randgen.nextInt());
+			SuckNode.addAttribute("state", SuckState);
+			SuckNode.addAttribute("ui.label", ("Suck "+SuckState.getVacuumX()+","+SuckState.getVacuumY()));
+			parent.getGraph().addEdge(parent.getId()+"->"+SuckNode.getId(), parent, SuckNode);
+			out.add(SuckNode);
 		}
 		if(currState.isActionValid("Right")){
-
+			State RightState=new State(currState);
+			RightState.setVacuumY(currState.getVacuumY()+1);
+			//may be id overlap here.
+			Node RightNode=parent.getGraph().addNode(RightState.toString()+randgen.nextInt());
+			RightNode.addAttribute("state", RightState);
+			RightNode.addAttribute("ui.label", ("Right "+RightState.getVacuumX()+","+RightState.getVacuumY()));
+			parent.getGraph().addEdge(parent.getId()+"->"+RightNode.getId(), parent, RightNode);
+			out.add(RightNode);
 		}
+		if(currState.isActionValid("Down")){
+			State DownState=new State(currState);
+			DownState.setVacuumX(currState.getVacuumX()+1);
+			//may be id overlap here.
+			Node DownNode=parent.getGraph().addNode(DownState.toString()+randgen.nextInt());
+			DownNode.addAttribute("state", DownState);
+			DownNode.addAttribute("ui.label", ("Down "+DownState.getVacuumX()+","+DownState.getVacuumY()));
+			parent.getGraph().addEdge(parent.getId()+"->"+DownNode.getId(), parent, DownNode);
+			out.add(DownNode);
+		}
+		return out;
 	}
-	
-	
-
-
-//		ArrayList<Room> ids_result=IDS(Instance1,3,2);
-//		if(ids_result==null){
-//			System.out.print("No IDS Solution found");
-//		}else{
-//			for(Room room: ids_result){
-//				System.out.println(room.toString());
-//			}
-//		}
-//		printRooms(Instance1);
-		
-//	}
-	
-//	public static ArrayList<Room> IDS(Room rooms[][],int x, int y){
-//		
-//		ArrayList<Room> path=new ArrayList<Room>();
-//		int depth=0;
-//		
-//		//initialize visited tracker array
-//		boolean visited[][]=new boolean[instancex][instancey];
-//		for(int i=0;i<instancex;i++){
-//			for(int j=0;j<instancey;j++){
-//				visited[i][j]=false;
-//			} 
-//		}
-//		while(true){
-//			System.out.print(depth);
-//			path=recursiveDFS(rooms,visited,x,y,0,depth);
-//			if(path!=null){
-//				return path;
-//			}
-//			depth++;
-//		}
-//	}
-	
-	//TODO needs editing
-//	public static ArrayList<Room> recursiveDFS(Room rooms[][],boolean visited[][],int currX,int currY,int currDepth,int max_depth){
-//		System.out.println("("+currX+","+currY+")\n");
-//		//mark as visited
-//		visited[currX][currY]=true;
-//		
-//		//if current room is dirty, then clean
-//		if(!rooms[currX][currY].getClean()){
-//			rooms[currX][currY].setClean(true);
-//		}
-//		
-//		//set hold value to find if whole room is clean
-//		boolean clean=true;
-//		for(Room[] row: rooms){
-//			for(Room room: row){
-//				if(!room.getClean()){
-//					clean=false;
-//				}
-//			}
-//		}
-//		//if room is clean, return current node
-//		if(clean){
-//			ArrayList<Room> hold=new ArrayList<Room>();
-//			hold.add(rooms[currX][currY]);
-//			return hold;
-//		}
-//		//check if depth has been reached
-//		if(currDepth==max_depth){
-//			System.out.print("Max depth");
-//			return null;
-//		}
-//		//find neighbors, and run dfs on each
-//		ArrayList<Room> validneighbors=getUnvisitedNeighbors(rooms,visited,currX,currY,instancex,instancey);
-//		if(!validneighbors.isEmpty()){
-//			System.out.print("Valid Neighbors Exist");
-//			System.out.println(validneighbors);
-//			for(Room room: validneighbors){
-//				ArrayList<Room> hold=recursiveDFS(rooms,visited,room.getX(),room.getY(),currDepth+1,max_depth);
-//				if(hold!=null){
-//					hold.add(rooms[currX][currY]);
-//					return hold;			
-//				}
-//			}
-//		}else{
-//			System.out.print("No valid Neighbors");
-//		}
-//		System.out.print("Failed node");
-//		return null;
-//	}
-//	
-//	public static ArrayList<Room> getUnvisitedNeighbors(Room instance[][],boolean visited[][],int x,int y, int xSize, int ySize){
-//		ArrayList<Room> out=new ArrayList<Room>();
-//			
-//		if(x-1>=0 && !visited[x-1][y]){
-//			System.out.print("Left");
-//			out.add(instance[x-1][y]);
-//		}
-//		if(y-1>=0 && !visited[x][y-1]){
-//			System.out.print("Down");
-//			out.add(instance[x][y-1]);
-//		}
-//		if(x+1<ySize  && !visited[x][y+1]){
-//			System.out.print("Up");
-//			out.add(instance[x][y+1]);
-//		}
-//		if(x+1<xSize && !visited[x+1][y]){
-//			System.out.print("Right");
-//			out.add(instance[x+1][y]);
-//		}
-//		for(Room room: out){
-//			System.out.print(room.toString());
-//		}
-//		return out;
-//	}
-
-	
-	
-
 }
 
