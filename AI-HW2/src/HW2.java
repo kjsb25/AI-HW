@@ -1,10 +1,10 @@
 import java.util.ArrayList;
+import org.graphstream.graph.*;
+import org.graphstream.graph.implementations.SingleGraph;
 
 public class HW2 {
 	
-	static int instancex;
-	static int instancey;
-
+	
 	public static void main(String[] args) {
 		
 		ArrayList<DirtyIndex> dirty=new ArrayList<DirtyIndex>();
@@ -16,9 +16,82 @@ public class HW2 {
 		dirty.add(new DirtyIndex(3,1));
 		dirty.add(new DirtyIndex(3,3));
 		
-		State temp=new State(4,4,dirty,3,2);
+		State instance1=new State(4,4,dirty,3,2, "");
 		
-		temp.printRooms();
+
+		
+		ArrayList<String> path=IDS(instance1);
+		
+		System.out.println(instance1.printRooms());
+		
+		
+	}
+	
+	//could be pointless. Was created before I realized the graph is generated during the search. Derp.
+	public static ArrayList<String> IDS(State instance){
+		int maxDepth=0;
+		ArrayList<String> path=new ArrayList<String>();
+		while(true){
+			Graph graph = new SingleGraph("Instance 1");
+			//TODO Remove before sending, only for visualization
+			graph.addAttribute("ui.stylesheet", "url('file:///C:/Users/Koonan/OneDrive/GIT/AI-HW/AI-HW2/lib/style.css')");
+			graph.addNode("1");
+			Node root=graph.getNode(1);
+			root.addAttribute("state", instance);
+			path=depthLimitedSearch(root,path,0,maxDepth);
+			graph.display();
+			//TODO add logic to check if valid
+			
+			maxDepth++;
+		}
+		
+		
+	}
+	
+	public static ArrayList<String> depthLimitedSearch(Node currNode,ArrayList<String> path,int currDepth,int depthLimit){
+		//pull in current node's state
+		State currState=(State)currNode.getAttribute("state");
+		//check if goal is achieved
+		if(currState.getNumDirty()==0){
+			//add current action to list, and return. Checks if it's the root first though.
+			if(currState.getPredecessorAction()!=""){
+				path.add(currState.getPredecessorAction());
+			}
+			return path;
+			//check if depth limit is reached
+		}else if(currDepth==depthLimit){
+			//returning the same list that was input is regarded as a failure
+			return path;
+		}
+		//evaluate each successor
+		
+		
+		return path;
+	}
+	
+	public static ArrayList<Node> getChildrenNodes(Node parent){
+		ArrayList<Node> out=new ArrayList<Node>();
+		State currState=(State)parent.getAttribute("state");
+		
+		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
+		if(currState.isActionValid("Up")){
+			
+		}
+		if(currState.isActionValid("Left")){
+
+		}
+		if(currState.isActionValid("Suck")){
+
+		}
+		if(currState.isActionValid("Down")){
+
+		}
+		if(currState.isActionValid("Right")){
+
+		}
+	}
+	
+	
 
 
 //		ArrayList<Room> ids_result=IDS(Instance1,3,2);
@@ -31,7 +104,7 @@ public class HW2 {
 //		}
 //		printRooms(Instance1);
 		
-	}
+//	}
 	
 //	public static ArrayList<Room> IDS(Room rooms[][],int x, int y){
 //		
