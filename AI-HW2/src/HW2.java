@@ -37,20 +37,75 @@ public class HW2 {
 		
 		State instance2=new State(5,6,dirty2,3,2, "");
 
-		long startTimeIDS1=System.nanoTime();
-		ArrayList<String> path1=IDS(instance1);
-		long endTimeIDS1=System.nanoTime();
+//		long startTimeIDS1=System.nanoTime();
+//		ArrayList<String> path1=IDS(instance1);
+//		long endTimeIDS1=System.nanoTime();
+//
+//		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
+//		
+//		
+//		long startTimeIDS2=System.nanoTime();
+//		ArrayList<String> path2=IDS(instance2);
+//		long endTimeIDS2=System.nanoTime();
+//		
+//		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
+		
+		long startTimeDFGS1=System.nanoTime();
+		ArrayList<String> DFGSpath1=DFGS(instance1);
+		long endTimeDFGS1=System.nanoTime();
 
-		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
+		System.out.println("DFGS Instance 1 time: "+((endTimeDFGS1-startTimeDFGS1)/1000000)+" ms");
 		
 		
-		long startTimeIDS2=System.nanoTime();
-		ArrayList<String> path2=IDS(instance2);
-		long endTimeIDS2=System.nanoTime();
-		
-		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
-		
-		
+	}
+	
+	public static ArrayList<String> DFGS(State instance){
+		ArrayList<String> path=new ArrayList<String>();
+		boolean done=false;
+		ArrayList<String> expanded=new ArrayList<String>();
+		int level=0;
+		Tree<State> graph=new Tree<State>(instance);
+		path=depthSearch(graph.getRoot(),path,expanded);
+		if(!expanded.isEmpty()){
+			System.out.println("Expanded:");
+			for(int i=0;i<10;i++){
+				System.out.println("	"+expanded.get(i));
+			}
+		}
+		if(!path.isEmpty()){
+			System.out.println("Path:");
+			for(String s: path){
+				System.out.println(s);
+			}
+			//put step cost here if needed
+		}else{
+			System.out.println("No Path Found : ");
+		}
+		return path;
+	}
+	
+	public static ArrayList<String> depthSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<String> expanded){
+		//pull in current node's state
+		State currState=currNode.getData();
+		currState.printRooms();
+		//check if goal is achieved
+		if(currState.getNumDirty()==0){
+			//add current action to list, and return. Checks if it's the root first though.
+			if(currState.getPredecessorAction()!=""){
+				path.add(currState.getPredecessorAction());
+			}
+			return path;
+			//check if depth limit is reached
+		}
+		int pathLength=path.size();
+		getChildrenNodes(currNode,expanded);
+		for(Tree.Node<State> hold: currNode.getChildren()){
+			path=depthSearch(hold, path, expanded);
+			if(pathLength!=path.size()){
+				return path;
+			}
+		}
+		return path;
 	}
 	
 	public static ArrayList<String> IDS(State instance){
@@ -60,8 +115,9 @@ public class HW2 {
 		
 		ArrayList<String> path=new ArrayList<String>();
 		boolean done=false;
+		ArrayList<String> expanded=new ArrayList<String>();
 		while(maxDepth<programLimit && !done){
-			ArrayList<String> expanded=new ArrayList<String>();
+			expanded.clear();
 
 			Tree<State> graph=new Tree<State>(instance);
 			path=depthLimitedSearch(graph.getRoot(),path,expanded,0,maxDepth);
@@ -72,14 +128,11 @@ public class HW2 {
 			}else{
 				done=true;
 			}
-			if(maxDepth==programLimit && !done){
-				System.out.println("Limit Reached");
-				if(!expanded.isEmpty()){
-					System.out.println("Expanded:");
-					for(int i=0;i<10;i++){
-						System.out.println("	"+expanded.get(i));
-					}
-				}
+		}
+		if(!expanded.isEmpty()){
+			System.out.println("Expanded:");
+			for(int i=0;i<10;i++){
+				System.out.println("	"+expanded.get(i));
 			}
 		}
 		if(!path.isEmpty()){
@@ -87,8 +140,9 @@ public class HW2 {
 			for(String s: path){
 				System.out.println(s);
 			}
+			//put step cost here if needed
 		}else{
-			System.out.println("No Path Found");
+			System.out.println("No Path Found : ");
 		}
 		return path;
 		
@@ -129,8 +183,15 @@ public class HW2 {
 			State UpState=new State(currState);
 			UpState.setVacuumX(currState.getVacuumX()-1);
 			
-			//add node with state to graph
-			parent.addChild(UpState);
+			//Check if node already exists
+			Tree.Node<State> hold=parent.findNode(UpState,new ArrayList<State>());
+			if(hold!=null){
+				hold.addEdge(parent);
+				parent.addEdge(hold);			
+			}else{
+				//add node with state to graph
+				parent.addEdge(UpState);
+			}
 
 			expanded.add("UP "+UpState.getVacuumX()+","+UpState.getVacuumY());
 		}
@@ -139,8 +200,15 @@ public class HW2 {
 			State LeftState=new State(currState);
 			LeftState.setVacuumY(currState.getVacuumY()-1);
 			
-			//add node with state to graph
-			parent.addChild(LeftState);
+			//Check if node already exists
+			Tree.Node<State> hold=parent.findNode(LeftState,new ArrayList<State>());
+			if(hold!=null){
+				hold.addEdge(parent);
+				parent.addEdge(hold);			
+			}else{
+				//add node with state to graph
+				parent.addEdge(LeftState);
+			}
 			
 			expanded.add("Left "+LeftState.getVacuumX()+","+LeftState.getVacuumY());
 		}
@@ -149,8 +217,15 @@ public class HW2 {
 			State SuckState=new State(currState);
 			SuckState.CleanCurrRoom();
 			
-			//add node with state to the graph
-			parent.addChild(SuckState);
+			//Check if node already exists
+			Tree.Node<State> hold=parent.findNode(SuckState,new ArrayList<State>());
+			if(hold!=null){
+				hold.addEdge(parent);
+				parent.addEdge(hold);			
+			}else{
+				//add node with state to graph
+				parent.addEdge(SuckState);
+			}
 			
 			expanded.add("Suck "+SuckState.getVacuumX()+","+SuckState.getVacuumY());
 		}
@@ -159,8 +234,15 @@ public class HW2 {
 			State RightState=new State(currState);
 			RightState.setVacuumY(currState.getVacuumY()+1);
 			
-			//add node with state to the graph
-			parent.addChild(RightState);
+			//Check if node already exists
+			Tree.Node<State> hold=parent.findNode(RightState,new ArrayList<State>());
+			if(hold!=null){
+				hold.addEdge(parent);
+				parent.addEdge(hold);			
+			}else{
+				//add node with state to graph
+				parent.addEdge(RightState);
+			}
 			
 			expanded.add("Right "+RightState.getVacuumX()+","+RightState.getVacuumY());
 		}
@@ -169,8 +251,15 @@ public class HW2 {
 			State DownState=new State(currState);
 			DownState.setVacuumX(currState.getVacuumX()+1);
 			
-			//add node with state to the graph
-			parent.addChild(DownState);
+			//Check if node already exists
+			Tree.Node<State> hold=parent.findNode(DownState,new ArrayList<State>());
+			if(hold!=null){
+				hold.addEdge(parent);
+				parent.addEdge(hold);			
+			}else{
+				//add node with state to graph
+				parent.addEdge(DownState);
+			}
 			
 			expanded.add("Down "+DownState.getVacuumX()+","+DownState.getVacuumY());
 		}
