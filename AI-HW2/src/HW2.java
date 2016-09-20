@@ -43,28 +43,14 @@ public class HW2 {
 		long startTimeIDS1=System.nanoTime();
 		ArrayList<String> path1=IDS(instance1);
 		long endTimeIDS1=System.nanoTime();
-		if(!path1.isEmpty()){
-			System.out.println("Path:");
-			for(String s: path1){
-				System.out.println(s);
-			}
-		}else{
-			System.out.println("No Path Found");
-		}
+
 		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
 		
 		
 		long startTimeIDS2=System.nanoTime();
 		ArrayList<String> path2=IDS(instance2);
 		long endTimeIDS2=System.nanoTime();
-		if(!path2.isEmpty()){
-			System.out.println("Path:");
-			for(String s: path2){
-				System.out.println(s);
-			}
-		}else{
-			System.out.println("No Path Found");
-		}
+		
 		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
 		
 		
@@ -72,7 +58,7 @@ public class HW2 {
 	
 	public static ArrayList<String> IDS(State instance){
 		int maxDepth=0;
-		int programLimit=20;
+		int programLimit=5;
 		
 		ArrayList<String> path=new ArrayList<String>();
 		boolean done=false;
@@ -84,7 +70,7 @@ public class HW2 {
 			graph.addNode("1");
 			Node root=graph.getNode("1");
 			root.addAttribute("state", instance);
-			// root.addAttribute("ui.label", ("Root "+instance.getVacuumX()+","+instance.getVacuumY()));
+			root.addAttribute("ui.label", ("Root "+instance.getVacuumX()+","+instance.getVacuumY()));
 			root.addAttribute("ui.class", "root");
 			path=depthLimitedSearch(root,path,expanded,0,maxDepth);
 			if(path.isEmpty()){
@@ -94,6 +80,7 @@ public class HW2 {
 				done=true;
 			}
 			if(maxDepth==programLimit && !done){
+				graph.display();
 				System.out.println("Limit Reached");
 				if(!expanded.isEmpty()){
 					System.out.println("Expanded:");
@@ -102,6 +89,14 @@ public class HW2 {
 					}
 				}
 			}
+		}
+		if(!path.isEmpty()){
+			System.out.println("Path:");
+			for(String s: path){
+				System.out.println(s);
+			}
+		}else{
+			System.out.println("No Path Found");
 		}
 		return path;
 		
@@ -147,8 +142,8 @@ public class HW2 {
 			//add node with state to graph
 			Node UpNode=parent.getGraph().addNode(UpState.toString()+randgen.nextInt());
 			UpNode.addAttribute("state", UpState);
-			// UpNode.addAttribute("ui.label", ("UP "+UpState.getVacuumX()+","+UpState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+UpNode.getId(), parent, UpNode);
+			 UpNode.addAttribute("ui.label", ("UP "+UpState.getVacuumX()+","+UpState.getVacuumY()));
+			 parent.getGraph().addEdge(parent.getId()+"->"+UpNode.getId(), parent, UpNode);
 			
 			//add node to output
 			out.add(UpNode);
@@ -163,8 +158,8 @@ public class HW2 {
 			//add node with state to graph
 			Node LeftNode=parent.getGraph().addNode(LeftState.toString()+randgen.nextInt());
 			LeftNode.addAttribute("state", LeftState);
-			// LeftNode.addAttribute("ui.label", ("Left "+LeftState.getVacuumX()+","+LeftState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+LeftNode.getId(), parent, LeftNode);
+			 LeftNode.addAttribute("ui.label", ("Left "+LeftState.getVacuumX()+","+LeftState.getVacuumY()));
+			 parent.getGraph().addEdge(parent.getId()+"->"+LeftNode.getId(), parent, LeftNode);
 			
 			//add node to output
 			out.add(LeftNode);
@@ -176,8 +171,8 @@ public class HW2 {
 			SuckState.CleanCurrRoom();
 			Node SuckNode=parent.getGraph().addNode(SuckState.toString()+randgen.nextInt());
 			SuckNode.addAttribute("state", SuckState);
-			// SuckNode.addAttribute("ui.label", ("Suck "+SuckState.getVacuumX()+","+SuckState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+SuckNode.getId(), parent, SuckNode);
+			 SuckNode.addAttribute("ui.label", ("Suck "+SuckState.getVacuumX()+","+SuckState.getVacuumY()));
+			 parent.getGraph().addEdge(parent.getId()+"->"+SuckNode.getId(), parent, SuckNode);
 			out.add(SuckNode);
 			
 			expanded.add("Suck "+SuckState.getVacuumX()+","+SuckState.getVacuumY());
@@ -187,8 +182,8 @@ public class HW2 {
 			RightState.setVacuumY(currState.getVacuumY()+1);
 			Node RightNode=parent.getGraph().addNode(RightState.toString()+randgen.nextInt());
 			RightNode.addAttribute("state", RightState);
-			// RightNode.addAttribute("ui.label", ("Right "+RightState.getVacuumX()+","+RightState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+RightNode.getId(), parent, RightNode);
+			 RightNode.addAttribute("ui.label", ("Right "+RightState.getVacuumX()+","+RightState.getVacuumY()));
+			 parent.getGraph().addEdge(parent.getId()+"->"+RightNode.getId(), parent, RightNode);
 			out.add(RightNode);
 			
 			expanded.add("Right "+RightState.getVacuumX()+","+RightState.getVacuumY());
@@ -198,8 +193,8 @@ public class HW2 {
 			DownState.setVacuumX(currState.getVacuumX()+1);
 			Node DownNode=parent.getGraph().addNode(DownState.toString()+randgen.nextInt());
 			DownNode.addAttribute("state", DownState);
-			// DownNode.addAttribute("ui.label", ("Down "+DownState.getVacuumX()+","+DownState.getVacuumY()));
-			// parent.getGraph().addEdge(parent.getId()+"->"+DownNode.getId(), parent, DownNode);
+			DownNode.addAttribute("ui.label", ("Down "+DownState.getVacuumX()+","+DownState.getVacuumY()));
+			parent.getGraph().addEdge(parent.getId()+"->"+DownNode.getId(), parent, DownNode);
 			out.add(DownNode);
 			
 			expanded.add("Down "+DownState.getVacuumX()+","+DownState.getVacuumY());
