@@ -1,0 +1,48 @@
+Depth of 0 failed
+Depth of 1 failed
+Depth of 2 failed
+Depth of 3 failed
+Depth of 4 failed
+Depth of 5 failed
+Depth of 6 failed
+Depth of 7 failed
+Depth of 8 failed
+Depth of 9 failed
+Limit Reached
+Expanded:
+	UP 1,1
+	Left 2,0
+	Right 2,2
+	Down 3,1
+	UP 0,1
+	Left 1,0
+	Suck 1,1
+	Right 1,2
+	Down 2,1
+	Left 0,0
+No Path Found
+IDS Instance 1 time: 447 ms
+Depth of 0 failed
+Depth of 1 failed
+Depth of 2 failed
+Depth of 3 failed
+Depth of 4 failed
+Depth of 5 failed
+Depth of 6 failed
+Depth of 7 failed
+Depth of 8 failed
+Depth of 9 failed
+Limit Reached
+Expanded:
+	UP 1,1
+	Left 2,0
+	Right 2,2
+	Down 3,1
+	UP 0,1
+	Left 1,0
+	Right 1,2
+	Down 2,1
+	Left 0,0
+	Suck 0,1
+No Path Found
+IDS Instance 2 time: 1193 ms

@@ -1,0 +1,8 @@
+node {
+	text-mode: normal;
+	fill-color: green;
+}
+
+node.root {
+	fill-color: red;
+}
