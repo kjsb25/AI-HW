@@ -118,7 +118,7 @@ public class HW2 {
 
 			boolean isExpanded=false;
 			for(State hold2: expanded){
-				if(hold.getData().compare(hold2)){
+				if(hold.getData().equals(hold2)){
 					isExpanded=true;
 				}
 			}

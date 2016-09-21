@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Here is the State Function that I made
- * @author Keenan
+ * Here is the State Class that I made
+ * @author Keenan Shumard
  *
  */
 public class State{
@@ -55,18 +55,20 @@ public class State{
 		this.layout = layout;
 	}
 	
-	public boolean compare(State other){
+	@Override
+	public boolean equals(Object other){
+		State otherState=(State)other;
 		boolean check1 = true;
-		for (int i = 0; check1 && i < other.maxX; ++i) {
-		    check1 = Arrays.equals(this.layout[i], other.layout[i]);
+		for (int i = 0; check1 && i < otherState.maxX; ++i) {
+		    check1 = Arrays.equals(this.layout[i], otherState.layout[i]);
 		}
 		if(
 		check1 &&
-		this.predecessorAction == other.getPredecessorAction() &&
-		this.maxX == other.getMaxX() &&
-		this.maxY == other.getMaxY() &&
-		this.vacuumX == other.getVacuumX() &&
-		this.vacuumY == other.getVacuumY()){
+		this.predecessorAction == otherState.getPredecessorAction() &&
+		this.maxX == otherState.getMaxX() &&
+		this.maxY == otherState.getMaxY() &&
+		this.vacuumX == otherState.getVacuumX() &&
+		this.vacuumY == otherState.getVacuumY()){
 			return true;
 		}else{
 			return false;
