@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Random;
+
 
 public class HW2 {
 	
@@ -71,7 +71,7 @@ public class HW2 {
 		ArrayList<State> expanded=new ArrayList<State>();
 		Tree<State> graph=new Tree<State>(instance);
 		expanded.add(instance);
-		path=depthSearch(graph.getRoot(),path,expanded);
+		int results=depthSearch(graph.getRoot(),path,expanded);
 		if(!expanded.isEmpty()){
 			System.out.println("Expanded:");
 			for(int i=0;i<10;i++){
@@ -90,27 +90,35 @@ public class HW2 {
 		return path;
 	}
 	
-	public static ArrayList<String> depthSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<State> expanded){
+	public static int depthSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<State> expanded){
 		//pull in current node's state
 		State currState=currNode.getData();
 		System.out.println(currState.getVacuumX()+","+currState.getVacuumY());
 		System.out.println(currState.printRooms());
 		//check if goal is achieved
 		if(currState.getNumDirty()==0){
-			//add current action to list, and return. Checks if it's the root first though.
-			if(currState.getPredecessorAction()!=""){
-				path.add(currState.getPredecessorAction());
-			}
-			return path;
-			//check if depth limit is reached
+			return 1;
 		}
-		int pathLength=path.size();
 		//get all children nodes
-		getChildrenNodesDFGS(currNode,expanded);
+		ArrayList<String> actions=getChildrenNodesDFGS(currNode,expanded);
+		int i=0;
+		System.out.println("List of actions:");
+		for(String hold1: actions){
+			System.out.println(hold1);
+		}
+		System.out.println("End List");
+		System.out.println("List of nodes:");
+		for(Tree.Node<State> hold1: currNode.getChildren()){
+			System.out.println("	"+hold1.getData().printRooms());
+		}
+		System.out.println("End List");
 		for(Tree.Node<State> hold: currNode.getChildren()){
+			System.out.print(currNode.getChildren().size()+" ");
+			System.out.println(actions.size());
+
 			boolean isExpanded=false;
 			for(State hold2: expanded){
-				if(hold.getData().compare((State)hold2)){
+				if(hold.getData().compare(hold2)){
 					isExpanded=true;
 				}
 			}
@@ -118,15 +126,17 @@ public class HW2 {
 				expanded.add(hold.getData());
 				//System.out.println(expanded.toString());
 				System.out.println(expanded.size());
-				path=depthSearch(hold, path, expanded);
-				if(pathLength!=path.size()){
-					return path;
+				path.add(actions.get(i));
+				int result=depthSearch(hold, path, expanded);
+				if(result==0){
+					path.remove(path.size()-1);
+				}else{
+					return 1;
 				}
 			}
-			System.out.println(expanded.toString());
-			System.out.println("test");
+			i++;
 		}
-		return path;
+		return 0;
 	}
 	
 	public static ArrayList<String> IDS(State instance){
@@ -253,7 +263,8 @@ public class HW2 {
 		}
 	}
 	
-	public static void getChildrenNodesDFGS(Tree.Node<State> parent,ArrayList<State> expanded){
+	public static ArrayList<String> getChildrenNodesDFGS(Tree.Node<State> parent,ArrayList<State> expanded){
+		ArrayList<String> actions=new ArrayList<String>();
 		State currState=parent.getData();
 		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
 		if(currState.isActionValid("Up")){
@@ -271,6 +282,7 @@ public class HW2 {
 					//add node with state to graph
 					parent.addEdge(UpState);
 				}
+				actions.add("Up");
 			}
 //			expanded.add(UpState);
 		}
@@ -288,10 +300,10 @@ public class HW2 {
 					//add node with state to graph
 					parent.addEdge(LeftState);
 				}
+				actions.add("Left");
 			}
 //			expanded.add(LeftState);
 		}
-		System.out.print(currState.isActionValid("Suck"));
 		if(currState.isActionValid("Suck")){
 			
 			//create new state to save changes, and change
@@ -307,6 +319,7 @@ public class HW2 {
 					//add node with state to graph
 					parent.addEdge(SuckState);
 				}
+				actions.add("Suck");
 			}
 //			expanded.add(SuckState);
 		}
@@ -324,6 +337,7 @@ public class HW2 {
 					//add node with state to graph
 					parent.addEdge(RightState);
 				}
+				actions.add("Right");
 			}
 //			expanded.add(RightState);
 		}
@@ -341,9 +355,11 @@ public class HW2 {
 					//add node with state to graph
 					parent.addEdge(DownState);
 				}
+				actions.add("Down");
 			}
 			//expanded.add(DownState);
 		}
+		return actions;
 	}
 }
 

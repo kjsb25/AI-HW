@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class State implements Cloneable{
+public class State{
 	private int[][] layout;
 	private String predecessorAction;
 	private int maxX;
@@ -9,7 +9,10 @@ public class State implements Cloneable{
 	private int vacuumX;
 	private int vacuumY;
 	
-
+	public State(){
+		super();
+	}
+	
 	public State(int maxX, int maxY,ArrayList<DirtyIndex> dirty, int vacuumX, int vacuumY,String predecessorAction) {
 		super();
 		setLayout(maxX,maxY,dirty);
@@ -68,7 +71,7 @@ public class State implements Cloneable{
 	public String printRooms(){
 		StringBuilder out=new StringBuilder();
 		
-		out.append("Room:\n");
+		out.append("Vacuum: ("+vacuumX+","+vacuumY+")\n");
 		for(int i=0;i<maxX;i++){
 			for(int j=0;j<maxY;j++){
 				if(layout[i][j]==0){

@@ -41,6 +41,7 @@ public class Tree<State> {
             return children;
         }
         
+        
         public void setParent(Node<State> parent) {
             parent.addChild(this);
             this.parent = parent;
