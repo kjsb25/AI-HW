@@ -37,11 +37,11 @@ public class HW2 {
 		
 		State instance2=new State(5,6,dirty2,3,2, "");
 		System.out.println("Starting IDS:");
-		long startTimeIDS1=System.nanoTime();
-		ArrayList<String> path1=IDS(instance1);
-		long endTimeIDS1=System.nanoTime();
-
-		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
+//		long startTimeIDS1=System.nanoTime();
+//		ArrayList<String> path1=IDS(instance1);
+//		long endTimeIDS1=System.nanoTime();
+//
+//		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
 		
 		
 		long startTimeIDS2=System.nanoTime();
@@ -61,6 +61,8 @@ public class HW2 {
 //		long startTimeDFGS1=System.nanoTime();
 //		ArrayList<String> DFGSpath1=DFGS(instance1_DFGS);
 //		long endTimeDFGS1=System.nanoTime();
+//		
+//		System.out.println("DFGS Instance 1 time: "+((endTimeDFGS1-startTimeDFGS1)/1000000)+" ms");
 //
 //		
 //		long startTimeDFGS2=System.nanoTime();
@@ -125,6 +127,7 @@ public class HW2 {
 //			System.out.println("	"+hold1.getData().printRooms());
 //		}
 //		System.out.println("End List");
+		
 		for(Tree.Node<State> hold: currNode.getChildren()){
 //			System.out.print(currNode.getChildren().size()+" ");
 //			System.out.println(actions.size());
@@ -154,7 +157,7 @@ public class HW2 {
 	
 	public static ArrayList<String> IDS(State instance){
 		int maxDepth=1;
-		int programLimit=10;
+		int programLimit=100;
 
 		
 		ArrayList<String> path=new ArrayList<String>();
@@ -172,7 +175,7 @@ public class HW2 {
 		if(!expanded.isEmpty()){
 			System.out.println("Expanded:");
 			for(int i=0;i<10;i++){
-				System.out.println("	"+expanded.get(i));
+				System.out.println("	"+expanded.get(i).printRooms());
 			}
 		}
 		if(!path.isEmpty()){
@@ -217,10 +220,13 @@ public class HW2 {
 		for(Tree.Node<State> temp: currNode.getChildren()){
 			children.add(temp);
 		}
+//		System.out.println("Current room:");
+//		System.out.println(currNode.getData().printRooms());
 		for(Tree.Node<State> hold: children){
 //			System.out.print(currNode.getChildren().size()+" ");
 //			System.out.println(actions.size());
-
+//			System.out.print(actions.get(i));
+//			System.out.println(hold.getData().printRooms());
 			boolean isExpanded=false;
 			for(State hold2: expanded){
 				if(hold.getData().equals(hold2)){
@@ -228,7 +234,15 @@ public class HW2 {
 				}
 			}
 			if(!isExpanded){
+				
+//				System.out.println("Expanded contents:");
+//				for(State s: expanded){
+//					System.out.println(s.printRooms());
+//				}
+//				System.out.println("Room that said it wasn't expanded:");
+//				System.out.println(hold.getData().printRooms());
 				expanded.add(hold.getData());
+				
 				//System.out.println(expanded.toString());
 //				System.out.println(expanded.size());
 				path.add(actions.get(i));
@@ -302,7 +316,7 @@ public class HW2 {
 	public static ArrayList<String> getChildrenNodesDFGS(Tree.Node<State> parent,ArrayList<State> expanded){
 		ArrayList<String> actions=new ArrayList<String>();
 		State currState=parent.getData();
-		System.out.println(currState.printRooms());
+//		System.out.println(currState.printRooms());
 		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
 		if(currState.isActionValid("Up")){
 			//create new state to save change, and apply change
@@ -397,6 +411,10 @@ public class HW2 {
 			}
 			//expanded.add(DownState);
 		}
+//		System.out.println("Children of node:");
+//		for(String s: actions){
+//			System.out.print(s+",");
+//		}
 		return actions;
 	}
 }
