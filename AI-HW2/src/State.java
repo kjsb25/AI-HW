@@ -120,6 +120,7 @@ public class State implements Cloneable{
 		}
 		return numDirty;
 	}
+	
 	public int getMaxX() {
 		return maxX;
 	}

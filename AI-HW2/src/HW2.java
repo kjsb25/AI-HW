@@ -36,19 +36,21 @@ public class HW2 {
 		dirty2.add(new DirtyIndex(5,6));
 		
 		State instance2=new State(5,6,dirty2,3,2, "");
+		System.out.println("Starting IDS:");
+		long startTimeIDS1=System.nanoTime();
+		ArrayList<String> path1=IDS(instance1);
+		long endTimeIDS1=System.nanoTime();
 
-//		long startTimeIDS1=System.nanoTime();
-//		ArrayList<String> path1=IDS(instance1);
-//		long endTimeIDS1=System.nanoTime();
-//
-//		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
-//		
-//		
-//		long startTimeIDS2=System.nanoTime();
-//		ArrayList<String> path2=IDS(instance2);
-//		long endTimeIDS2=System.nanoTime();
-//		
-//		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
+		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
+		
+		
+		long startTimeIDS2=System.nanoTime();
+		ArrayList<String> path2=IDS(instance2);
+		long endTimeIDS2=System.nanoTime();
+		
+		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
+		
+		System.out.println("Starting DFGS:");
 		
 		long startTimeDFGS1=System.nanoTime();
 		ArrayList<String> DFGSpath1=DFGS(instance1);
@@ -61,9 +63,7 @@ public class HW2 {
 	
 	public static ArrayList<String> DFGS(State instance){
 		ArrayList<String> path=new ArrayList<String>();
-		boolean done=false;
 		ArrayList<String> expanded=new ArrayList<String>();
-		int level=0;
 		Tree<State> graph=new Tree<State>(instance);
 		path=depthSearch(graph.getRoot(),path,expanded);
 		if(!expanded.isEmpty()){
@@ -87,7 +87,8 @@ public class HW2 {
 	public static ArrayList<String> depthSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<String> expanded){
 		//pull in current node's state
 		State currState=currNode.getData();
-		currState.printRooms();
+		System.out.println(currState.getVacuumX()+","+currState.getVacuumY());
+		System.out.println(currState.printRooms());
 		//check if goal is achieved
 		if(currState.getNumDirty()==0){
 			//add current action to list, and return. Checks if it's the root first though.
@@ -98,11 +99,13 @@ public class HW2 {
 			//check if depth limit is reached
 		}
 		int pathLength=path.size();
-		getChildrenNodes(currNode,expanded);
+		getChildrenNodesDFGS(currNode,expanded);
 		for(Tree.Node<State> hold: currNode.getChildren()){
-			path=depthSearch(hold, path, expanded);
-			if(pathLength!=path.size()){
-				return path;
+			if(!expanded.contains(hold.getData())){
+				path=depthSearch(hold, path, expanded);
+				if(pathLength!=path.size()){
+					return path;
+				}
 			}
 		}
 		return path;
@@ -165,7 +168,7 @@ public class HW2 {
 			return path;
 		}
 		int pathLength=path.size();
-		getChildrenNodes(currNode,expanded);
+		getChildrenNodesIDS(currNode,expanded);
 		for(Tree.Node<State> hold: currNode.getChildren()){
 			path=depthLimitedSearch(hold, path, expanded,currDepth+1, depthLimit);
 			if(pathLength!=path.size()){
@@ -175,7 +178,62 @@ public class HW2 {
 		return path;
 	}
 	
-	public static void getChildrenNodes(Tree.Node<State> parent,ArrayList<String> expanded){
+	public static void getChildrenNodesIDS(Tree.Node<State> parent,ArrayList<String> expanded){
+		State currState=parent.getData();
+		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
+		if(currState.isActionValid("Up")){
+			//create new state to save change, and apply change
+			State UpState=new State(currState);
+			UpState.setVacuumX(currState.getVacuumX()-1);
+			
+			//add node with state to graph
+			parent.addChild(UpState);
+
+			expanded.add("UP "+UpState.getVacuumX()+","+UpState.getVacuumY());
+		}
+		if(currState.isActionValid("Left")){
+			//create new state to save change, and apply change
+			State LeftState=new State(currState);
+			LeftState.setVacuumY(currState.getVacuumY()-1);
+			
+			//add node with state to graph
+			parent.addChild(LeftState);
+			
+			expanded.add("Left "+LeftState.getVacuumX()+","+LeftState.getVacuumY());
+		}
+		if(currState.isActionValid("Suck")){
+			//create new state to save changes, and change
+			State SuckState=new State(currState);
+			SuckState.CleanCurrRoom();
+			
+			//add node with state to the graph
+			parent.addChild(SuckState);
+			
+			expanded.add("Suck "+SuckState.getVacuumX()+","+SuckState.getVacuumY());
+		}
+		if(currState.isActionValid("Right")){
+			//create new state to save changes, and change
+			State RightState=new State(currState);
+			RightState.setVacuumY(currState.getVacuumY()+1);
+			
+			//add node with state to the graph
+			parent.addChild(RightState);
+			
+			expanded.add("Right "+RightState.getVacuumX()+","+RightState.getVacuumY());
+		}
+		if(currState.isActionValid("Down")){
+			//create new state to save changes, and change
+			State DownState=new State(currState);
+			DownState.setVacuumX(currState.getVacuumX()+1);
+			
+			//add node with state to the graph
+			parent.addChild(DownState);
+			
+			expanded.add("Down "+DownState.getVacuumX()+","+DownState.getVacuumY());
+		}
+	}
+	
+	public static void getChildrenNodesDFGS(Tree.Node<State> parent,ArrayList<String> expanded){
 		State currState=parent.getData();
 		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
 		if(currState.isActionValid("Up")){

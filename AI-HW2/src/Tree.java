@@ -104,17 +104,17 @@ public class Tree<State> {
         }
         
         public Node<State> findNode(State data, ArrayList<State> visited){
-    		if(this.data==data){
+    		if(data.equals(this.data)){
     			return this;
     		}
-    		if(visited.isEmpty()){
-    			visited.add(data);
-    		}
+    		visited.add(this.data);
+    		
     		for(Node<State> child: this.getChildren()){
     			if(!visited.contains(child.data)){
     				visited.add(child.data);
 	    			Node<State> hold=child.findNode(data,visited);
 	    			if(hold!=null){
+	    				System.out.println("Returned similar node");
 	    				return hold;
 	    			}
     			}
