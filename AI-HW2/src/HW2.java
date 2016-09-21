@@ -133,8 +133,9 @@ public class HW2 {
 				}else{
 					return 1;
 				}
+				i++;
 			}
-			i++;
+			
 		}
 		return 0;
 	}
