@@ -108,13 +108,12 @@ public class Tree<State> {
     			return this;
     		}
     		visited.add(this.data);
-    		
     		for(Node<State> child: this.getChildren()){
     			if(!visited.contains(child.data)){
     				visited.add(child.data);
 	    			Node<State> hold=child.findNode(data,visited);
 	    			if(hold!=null){
-	    				System.out.println("Returned similar node");
+	    				System.out.println("Found same node!");
 	    				return hold;
 	    			}
     			}

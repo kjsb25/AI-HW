@@ -58,7 +58,6 @@ public class HW2 {
 
 		System.out.println("DFGS Instance 1 time: "+((endTimeDFGS1-startTimeDFGS1)/1000000)+" ms");
 		
-		
 	}
 	
 	public static ArrayList<String> DFGS(State instance){
@@ -99,6 +98,7 @@ public class HW2 {
 			//check if depth limit is reached
 		}
 		int pathLength=path.size();
+		//get all children nodes
 		getChildrenNodesDFGS(currNode,expanded);
 		for(Tree.Node<State> hold: currNode.getChildren()){
 			if(!expanded.contains(hold.getData())){
@@ -167,7 +167,9 @@ public class HW2 {
 			//returning the same list that was input is regarded as a failure
 			return path;
 		}
+		//save path size
 		int pathLength=path.size();
+		//find all children nodes
 		getChildrenNodesIDS(currNode,expanded);
 		for(Tree.Node<State> hold: currNode.getChildren()){
 			path=depthLimitedSearch(hold, path, expanded,currDepth+1, depthLimit);
@@ -244,8 +246,7 @@ public class HW2 {
 			//Check if node already exists
 			Tree.Node<State> hold=parent.findNode(UpState,new ArrayList<State>());
 			if(hold!=null){
-				hold.addEdge(parent);
-				parent.addEdge(hold);			
+				hold.addEdge(parent);		
 			}else{
 				//add node with state to graph
 				parent.addEdge(UpState);
@@ -261,8 +262,7 @@ public class HW2 {
 			//Check if node already exists
 			Tree.Node<State> hold=parent.findNode(LeftState,new ArrayList<State>());
 			if(hold!=null){
-				hold.addEdge(parent);
-				parent.addEdge(hold);			
+				hold.addEdge(parent);			
 			}else{
 				//add node with state to graph
 				parent.addEdge(LeftState);
@@ -278,8 +278,7 @@ public class HW2 {
 			//Check if node already exists
 			Tree.Node<State> hold=parent.findNode(SuckState,new ArrayList<State>());
 			if(hold!=null){
-				hold.addEdge(parent);
-				parent.addEdge(hold);			
+				hold.addEdge(parent);		
 			}else{
 				//add node with state to graph
 				parent.addEdge(SuckState);
@@ -295,8 +294,7 @@ public class HW2 {
 			//Check if node already exists
 			Tree.Node<State> hold=parent.findNode(RightState,new ArrayList<State>());
 			if(hold!=null){
-				hold.addEdge(parent);
-				parent.addEdge(hold);			
+				hold.addEdge(parent);		
 			}else{
 				//add node with state to graph
 				parent.addEdge(RightState);
@@ -312,8 +310,7 @@ public class HW2 {
 			//Check if node already exists
 			Tree.Node<State> hold=parent.findNode(DownState,new ArrayList<State>());
 			if(hold!=null){
-				hold.addEdge(parent);
-				parent.addEdge(hold);			
+				hold.addEdge(parent);		
 			}else{
 				//add node with state to graph
 				parent.addEdge(DownState);
