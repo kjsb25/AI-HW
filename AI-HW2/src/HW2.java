@@ -56,18 +56,18 @@ public class HW2 {
 				
 		State instance2_DFGS=new State(5,6,dirty2,3,2, "");
 		
-		System.out.println("Starting DFGS:");
-		
-		long startTimeDFGS1=System.nanoTime();
-		ArrayList<String> DFGSpath1=DFGS(instance1_DFGS);
-		long endTimeDFGS1=System.nanoTime();
-
-		
-		long startTimeDFGS2=System.nanoTime();
-		ArrayList<String> DFGSpath2=DFGS(instance2_DFGS);
-		long endTimeDFGS2=System.nanoTime();
-
-		System.out.println("DFGS Instance 2 time: "+((endTimeDFGS2-startTimeDFGS2)/1000000)+" ms");
+//		System.out.println("Starting DFGS:");
+//		
+//		long startTimeDFGS1=System.nanoTime();
+//		ArrayList<String> DFGSpath1=DFGS(instance1_DFGS);
+//		long endTimeDFGS1=System.nanoTime();
+//
+//		
+//		long startTimeDFGS2=System.nanoTime();
+//		ArrayList<String> DFGSpath2=DFGS(instance2_DFGS);
+//		long endTimeDFGS2=System.nanoTime();
+//
+//		System.out.println("DFGS Instance 2 time: "+((endTimeDFGS2-startTimeDFGS2)/1000000)+" ms");
 		
 	}
 	
@@ -213,7 +213,11 @@ public class HW2 {
 		//find all children nodes
 		ArrayList<String> actions=getChildrenNodesDFGS(currNode,expanded);
 		int i=0;
-		for(Tree.Node<State> hold: currNode.getChildren()){
+		ArrayList<Tree.Node<State>> children = new ArrayList<Tree.Node<State>>();
+		for(Tree.Node<State> temp: currNode.getChildren()){
+			children.add(temp);
+		}
+		for(Tree.Node<State> hold: children){
 //			System.out.print(currNode.getChildren().size()+" ");
 //			System.out.println(actions.size());
 
