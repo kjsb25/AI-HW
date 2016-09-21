@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class State implements Cloneable{
 	private int[][] layout;
@@ -21,7 +22,9 @@ public class State implements Cloneable{
 	
 	//Constructor used to duplicate a previous state
 	public State(State original){
-		this.layout=original.getLayout();
+		this.layout=new int[original.maxX][];
+		for(int i = 0; i < original.maxY; i++)
+		    this.layout[i] = Arrays.copyOf(original.layout[i],original.maxY);
 		this.predecessorAction = original.getPredecessorAction();
 		this.maxX = original.getMaxX();
 		this.maxY = original.getMaxY();
@@ -44,6 +47,24 @@ public class State implements Cloneable{
 		this.layout = layout;
 	}
 	
+	public boolean compare(State other){
+		boolean check1 = true;
+		for (int i = 0; check1 && i < other.maxX; ++i) {
+		    check1 = Arrays.equals(this.layout[i], other.layout[i]);
+		}
+		if(
+		check1 &&
+		this.predecessorAction == other.getPredecessorAction() &&
+		this.maxX == other.getMaxX() &&
+		this.maxY == other.getMaxY() &&
+		this.vacuumX == other.getVacuumX() &&
+		this.vacuumY == other.getVacuumY()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	public String printRooms(){
 		StringBuilder out=new StringBuilder();
 		
@@ -64,29 +85,29 @@ public class State implements Cloneable{
 	//TODO RECHECK ALL OF THIS, THIS SHIT IS IMPORTANT. 
 	public boolean isActionValid(String action){
 		if(action=="Left"){
-			if(vacuumY-1>=0){
+			if(this.vacuumY-1>=0){
 				return true;
 			}else{
 				return false;
 			}
 		}else if(action=="Right"){
-			if(vacuumY+1<maxY){
+			if(this.vacuumY+1<this.maxY){
 				return true;
 			}else
 				return false;
 		}else if(action=="Down"){
 			//TODO is this right?
-			if(vacuumX+1<maxX){
+			if(this.vacuumX+1<this.maxX){
 				return true;
 			}else
 				return false;
 		}else if(action=="Up"){
-			if(vacuumX-1>=0){
+			if(this.vacuumX-1>=0){
 				return true;
 			}else
 				return false;
 		}else if(action=="Suck"){
-			if(isCurrRoomDirty()==1){
+			if(this.isCurrRoomDirty()==1){
 				return true;
 			}else
 				return false;
@@ -97,16 +118,16 @@ public class State implements Cloneable{
 	}
 	
 	public int isCurrRoomDirty(){
-		if(vacuumX<0 || vacuumY<0 || vacuumX>=maxX || vacuumY>=maxY){
-			System.out.println("Cell out of range ("+vacuumX+","+vacuumY+")");
+		if(this.vacuumX<0 || this.vacuumY<0 || this.vacuumX>=maxX || this.vacuumY>=maxY){
+			System.out.println("Cell out of range ("+this.vacuumX+","+this.vacuumY+")");
 			return -1;
 		}else{
-			return (layout[vacuumX][vacuumY]);
+			return (this.layout[vacuumX][vacuumY]);
 		}
 	}
 	
 	public void CleanCurrRoom(){
-		layout[vacuumX][vacuumY]=1;
+		this.layout[vacuumX][vacuumY]=0;
 	}
 	
 	public int getNumDirty(){

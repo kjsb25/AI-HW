@@ -36,24 +36,30 @@ public class HW2 {
 		dirty2.add(new DirtyIndex(5,6));
 		
 		State instance2=new State(5,6,dirty2,3,2, "");
-		System.out.println("Starting IDS:");
-		long startTimeIDS1=System.nanoTime();
-		ArrayList<String> path1=IDS(instance1);
-		long endTimeIDS1=System.nanoTime();
-
-		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
+//		System.out.println("Starting IDS:");
+//		long startTimeIDS1=System.nanoTime();
+//		ArrayList<String> path1=IDS(instance1);
+//		long endTimeIDS1=System.nanoTime();
+//
+//		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
+//		
+//		
+//		long startTimeIDS2=System.nanoTime();
+//		ArrayList<String> path2=IDS(instance2);
+//		long endTimeIDS2=System.nanoTime();
 		
+//		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
 		
-		long startTimeIDS2=System.nanoTime();
-		ArrayList<String> path2=IDS(instance2);
-		long endTimeIDS2=System.nanoTime();
-		
-		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
+				
+		State instance1_DFGS=new State(4,4,dirty1,3,2, "");
+			
+				
+		State instance2_DFGS=new State(5,6,dirty2,3,2, "");
 		
 		System.out.println("Starting DFGS:");
 		
 		long startTimeDFGS1=System.nanoTime();
-		ArrayList<String> DFGSpath1=DFGS(instance1);
+		ArrayList<String> DFGSpath1=DFGS(instance1_DFGS);
 		long endTimeDFGS1=System.nanoTime();
 
 		System.out.println("DFGS Instance 1 time: "+((endTimeDFGS1-startTimeDFGS1)/1000000)+" ms");
@@ -62,8 +68,9 @@ public class HW2 {
 	
 	public static ArrayList<String> DFGS(State instance){
 		ArrayList<String> path=new ArrayList<String>();
-		ArrayList<String> expanded=new ArrayList<String>();
+		ArrayList<State> expanded=new ArrayList<State>();
 		Tree<State> graph=new Tree<State>(instance);
+		expanded.add(instance);
 		path=depthSearch(graph.getRoot(),path,expanded);
 		if(!expanded.isEmpty()){
 			System.out.println("Expanded:");
@@ -83,7 +90,7 @@ public class HW2 {
 		return path;
 	}
 	
-	public static ArrayList<String> depthSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<String> expanded){
+	public static ArrayList<String> depthSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<State> expanded){
 		//pull in current node's state
 		State currState=currNode.getData();
 		System.out.println(currState.getVacuumX()+","+currState.getVacuumY());
@@ -101,12 +108,23 @@ public class HW2 {
 		//get all children nodes
 		getChildrenNodesDFGS(currNode,expanded);
 		for(Tree.Node<State> hold: currNode.getChildren()){
-			if(!expanded.contains(hold.getData())){
+			boolean isExpanded=false;
+			for(State hold2: expanded){
+				if(hold.getData().compare((State)hold2)){
+					isExpanded=true;
+				}
+			}
+			if(!isExpanded){
+				expanded.add(hold.getData());
+				//System.out.println(expanded.toString());
+				System.out.println(expanded.size());
 				path=depthSearch(hold, path, expanded);
 				if(pathLength!=path.size()){
 					return path;
 				}
 			}
+			System.out.println(expanded.toString());
+			System.out.println("test");
 		}
 		return path;
 	}
@@ -235,7 +253,7 @@ public class HW2 {
 		}
 	}
 	
-	public static void getChildrenNodesDFGS(Tree.Node<State> parent,ArrayList<String> expanded){
+	public static void getChildrenNodesDFGS(Tree.Node<State> parent,ArrayList<State> expanded){
 		State currState=parent.getData();
 		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
 		if(currState.isActionValid("Up")){
@@ -243,80 +261,88 @@ public class HW2 {
 			State UpState=new State(currState);
 			UpState.setVacuumX(currState.getVacuumX()-1);
 			
-			//Check if node already exists
-			Tree.Node<State> hold=parent.findNode(UpState,new ArrayList<State>());
-			if(hold!=null){
-				hold.addEdge(parent);		
-			}else{
-				//add node with state to graph
-				parent.addEdge(UpState);
+			//check if state has already been expanded
+			if(!expanded.contains(UpState)) {
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(UpState,new ArrayList<State>());
+				if(hold!=null){
+					hold.addEdge(parent);		
+				}else{
+					//add node with state to graph
+					parent.addEdge(UpState);
+				}
 			}
-
-			expanded.add("UP "+UpState.getVacuumX()+","+UpState.getVacuumY());
+//			expanded.add(UpState);
 		}
 		if(currState.isActionValid("Left")){
 			//create new state to save change, and apply change
 			State LeftState=new State(currState);
 			LeftState.setVacuumY(currState.getVacuumY()-1);
-			
-			//Check if node already exists
-			Tree.Node<State> hold=parent.findNode(LeftState,new ArrayList<State>());
-			if(hold!=null){
-				hold.addEdge(parent);			
-			}else{
-				//add node with state to graph
-				parent.addEdge(LeftState);
+			//check if state has already been expanded
+			if(!expanded.contains(LeftState)) {
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(LeftState,new ArrayList<State>());
+				if(hold!=null){
+					hold.addEdge(parent);			
+				}else{
+					//add node with state to graph
+					parent.addEdge(LeftState);
+				}
 			}
-			
-			expanded.add("Left "+LeftState.getVacuumX()+","+LeftState.getVacuumY());
+//			expanded.add(LeftState);
 		}
+		System.out.print(currState.isActionValid("Suck"));
 		if(currState.isActionValid("Suck")){
+			
 			//create new state to save changes, and change
 			State SuckState=new State(currState);
 			SuckState.CleanCurrRoom();
-			
-			//Check if node already exists
-			Tree.Node<State> hold=parent.findNode(SuckState,new ArrayList<State>());
-			if(hold!=null){
-				hold.addEdge(parent);		
-			}else{
-				//add node with state to graph
-				parent.addEdge(SuckState);
+			//check if state has already been expanded
+			if(!expanded.contains(SuckState)) {
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(SuckState,new ArrayList<State>());
+				if(hold!=null){
+					hold.addEdge(parent);		
+				}else{
+					//add node with state to graph
+					parent.addEdge(SuckState);
+				}
 			}
-			
-			expanded.add("Suck "+SuckState.getVacuumX()+","+SuckState.getVacuumY());
+//			expanded.add(SuckState);
 		}
 		if(currState.isActionValid("Right")){
 			//create new state to save changes, and change
 			State RightState=new State(currState);
 			RightState.setVacuumY(currState.getVacuumY()+1);
-			
-			//Check if node already exists
-			Tree.Node<State> hold=parent.findNode(RightState,new ArrayList<State>());
-			if(hold!=null){
-				hold.addEdge(parent);		
-			}else{
-				//add node with state to graph
-				parent.addEdge(RightState);
+			//check if state has already been expanded
+			if(!expanded.contains(RightState)) {
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(RightState,new ArrayList<State>());
+				if(hold!=null){
+					hold.addEdge(parent);		
+				}else{
+					//add node with state to graph
+					parent.addEdge(RightState);
+				}
 			}
-			
-			expanded.add("Right "+RightState.getVacuumX()+","+RightState.getVacuumY());
+//			expanded.add(RightState);
 		}
 		if(currState.isActionValid("Down")){
 			//create new state to save changes, and change
 			State DownState=new State(currState);
 			DownState.setVacuumX(currState.getVacuumX()+1);
-			
-			//Check if node already exists
-			Tree.Node<State> hold=parent.findNode(DownState,new ArrayList<State>());
-			if(hold!=null){
-				hold.addEdge(parent);		
-			}else{
-				//add node with state to graph
-				parent.addEdge(DownState);
+			//check if state has already been expanded
+			if(!expanded.contains(DownState)) {
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(DownState,new ArrayList<State>());
+				if(hold!=null){
+					hold.addEdge(parent);		
+				}else{
+					//add node with state to graph
+					parent.addEdge(DownState);
+				}
 			}
-			
-			expanded.add("Down "+DownState.getVacuumX()+","+DownState.getVacuumY());
+			//expanded.add(DownState);
 		}
 	}
 }

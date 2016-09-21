@@ -120,6 +120,7 @@ public class Tree<State> {
     		}
     		return null;
     	}
+        
 
         public void removeParent() {
             this.parent = null;
