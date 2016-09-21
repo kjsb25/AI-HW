@@ -32,7 +32,7 @@ public class State{
 	public State(State original){
 		System.out.println(original.getMaxX()+","+original.getMaxY());
 		this.layout=new int[original.getMaxX()][];
-		for(int i = 0; i < original.maxY; i++){
+		for(int i = 0; i < original.maxX; i++){
 			this.layout[i]=new int[original.getMaxY()];
 		    this.layout[i] = Arrays.copyOf(original.layout[i],original.maxY);
 		}
