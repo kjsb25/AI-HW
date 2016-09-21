@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Here is the State Function that I made
+ * @author Keenan
+ *
+ */
 public class State{
 	private int[][] layout;
 	private String predecessorAction;

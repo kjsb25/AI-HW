@@ -2,74 +2,77 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tree<State> {
-	
-	private Node<State> root;
+//TODO figure ALLL this shit out
 
-	 public Tree(State rootData) {
-	        root = new Node<State>(rootData);
-	        root.children = new ArrayList<Node<State>>();
+public class Tree<T> {
+	
+	private Node<T> root;
+
+	 public Tree(T rootData) {
+	        root = new Node<T>(rootData);
+	        root.children = new ArrayList<Node<T>>();
 	}
 
-    public Node<State> getRoot() {
+    public Node<T> getRoot() {
 		return root;
 	}
 
-	public void setRoot(Node<State> root) {
+	public void setRoot(Node<T> root) {
 		this.root = root;
 	}
 	
 	
 
-	public static class Node<State> {
-        private State data;
-        private Node<State> parent;
-        private List<Node<State>> children;
+	public static class Node<T> {
+        private T data;
+        private Node<T> parent;
+        private List<Node<T>> children;
 
-        public Node(State data) {
+        public Node(T data) {
             this.data = data;
-            this.children = new ArrayList<Node<State>>();
+            this.children = new ArrayList<Node<T>>();
         }
 
-        public Node(State data, Node<State> parent) {
+        public Node(T data, Node<T> parent) {
             this.data = data;
             this.parent = parent;
-            this.children = new ArrayList<Node<State>>();
+            this.children = new ArrayList<Node<T>>();
         }
         
-        public List<Node<State>> getChildren() {
+        public List<Node<T>> getChildren() {
             return children;
         }
         
         
-        public void setParent(Node<State> parent) {
+        public void setParent(Node<T> parent) {
             parent.addChild(this);
             this.parent = parent;
         }
         
-        public void addChild(State data) {
+        public void addChild(T data) {
         	
-            Node<State> child = new Node<State>(data,this);
+            Node<T> child = new Node<T>(data,this);
             this.addChild(child);
         }
         
-        public void addEdge(State data){
+        public void addEdge(T data){
         	boolean alreadyConnected=false;
-        	for(Node<State> connected: this.children){
-        		if(connected.data==data){
+        	for(Node<T> connected: this.children){
+        		//TODO Figure this shit out
+        		if((State)(connected.data)==data){
         			alreadyConnected=true;
         		}
         	}
         	if(!alreadyConnected){
-        		Node<State> newNode=new Node<State>(data);
+        		Node<T> newNode=new Node<T>(data);
         		this.children.add(newNode);
         		newNode.children.add(this);
         	}
         }
         
-        public void addEdge(Node<State> node){
+        public void addEdge(Node<T> node){
         	boolean alreadyConnected=false;
-        	for(Node<State> connected: this.children){
+        	for(Node<T> connected: this.children){
         		if(connected.data==node.data){
         			alreadyConnected=true;
         		}
@@ -80,16 +83,16 @@ public class Tree<State> {
         	}
         }
 
-        public void addChild(Node<State> child) {
+        public void addChild(Node<T> child) {
             child.parent=(this);
             this.children.add(child);
         }
 
-        public State getData() {
+        public T getData() {
             return this.data;
         }
 
-        public void setData(State data) {
+        public void setData(T data) {
             this.data = data;
         }
 
@@ -104,15 +107,15 @@ public class Tree<State> {
                 return false;
         }
         
-        public Node<State> findNode(State data, ArrayList<State> visited){
+        public Node<T> findNode(T data, ArrayList<T> visited){
     		if(data.equals(this.data)){
     			return this;
     		}
     		visited.add(this.data);
-    		for(Node<State> child: this.getChildren()){
+    		for(Node<T> child: this.getChildren()){
     			if(!visited.contains(child.data)){
     				visited.add(child.data);
-	    			Node<State> hold=child.findNode(data,visited);
+	    			Node<T> hold=child.findNode(data,visited);
 	    			if(hold!=null){
 	    				System.out.println("Found same node!");
 	    				return hold;

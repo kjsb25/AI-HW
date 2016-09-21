@@ -177,7 +177,6 @@ public class HW2 {
 		}
 		return path;
 		
-		
 	}
 	
 	public static ArrayList<String> depthLimitedSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<String> expanded,int currDepth,int depthLimit){
@@ -276,7 +275,7 @@ public class HW2 {
 			if(!expanded.contains(UpState)) {
 				//Check if node already exists
 				Tree.Node<State> hold=parent.findNode(UpState,new ArrayList<State>());
-				if(hold!=null){
+				if(hold!=null && !hold.getChildren().contains(parent)){
 					hold.addEdge(parent);		
 				}else{
 					//add node with state to graph
@@ -294,7 +293,7 @@ public class HW2 {
 			if(!expanded.contains(LeftState)) {
 				//Check if node already exists
 				Tree.Node<State> hold=parent.findNode(LeftState,new ArrayList<State>());
-				if(hold!=null){
+				if(hold!=null && !hold.getChildren().contains(parent)){
 					hold.addEdge(parent);			
 				}else{
 					//add node with state to graph
@@ -313,7 +312,7 @@ public class HW2 {
 			if(!expanded.contains(SuckState)) {
 				//Check if node already exists
 				Tree.Node<State> hold=parent.findNode(SuckState,new ArrayList<State>());
-				if(hold!=null){
+				if(hold!=null && !hold.getChildren().contains(parent)){
 					hold.addEdge(parent);		
 				}else{
 					//add node with state to graph
@@ -331,7 +330,7 @@ public class HW2 {
 			if(!expanded.contains(RightState)) {
 				//Check if node already exists
 				Tree.Node<State> hold=parent.findNode(RightState,new ArrayList<State>());
-				if(hold!=null){
+				if(hold!=null && !hold.getChildren().contains(parent)){
 					hold.addEdge(parent);		
 				}else{
 					//add node with state to graph
@@ -349,7 +348,8 @@ public class HW2 {
 			if(!expanded.contains(DownState)) {
 				//Check if node already exists
 				Tree.Node<State> hold=parent.findNode(DownState,new ArrayList<State>());
-				if(hold!=null){
+				if(hold!=null && !hold.getChildren().contains(parent)){
+					System.out.println("Hold was indeed null");
 					hold.addEdge(parent);		
 				}else{
 					//add node with state to graph
