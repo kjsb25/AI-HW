@@ -30,9 +30,12 @@ public class State{
 	
 	//Constructor used to duplicate a previous state
 	public State(State original){
-		this.layout=new int[original.maxX][];
-		for(int i = 0; i < original.maxY; i++)
+		System.out.println(original.getMaxX()+","+original.getMaxY());
+		this.layout=new int[original.getMaxX()][];
+		for(int i = 0; i < original.maxY; i++){
+			this.layout[i]=new int[original.getMaxY()];
 		    this.layout[i] = Arrays.copyOf(original.layout[i],original.maxY);
+		}
 		this.predecessorAction = original.getPredecessorAction();
 		this.maxX = original.getMaxX();
 		this.maxY = original.getMaxY();

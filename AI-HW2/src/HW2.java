@@ -64,6 +64,12 @@ public class HW2 {
 
 		System.out.println("DFGS Instance 1 time: "+((endTimeDFGS1-startTimeDFGS1)/1000000)+" ms");
 		
+		long startTimeDFGS2=System.nanoTime();
+		ArrayList<String> DFGSpath2=DFGS(instance2_DFGS);
+		long endTimeDFGS2=System.nanoTime();
+
+		System.out.println("DFGS Instance 2 time: "+((endTimeDFGS2-startTimeDFGS2)/1000000)+" ms");
+		
 	}
 	
 	public static ArrayList<String> DFGS(State instance){
@@ -282,6 +288,7 @@ public class HW2 {
 	public static ArrayList<String> getChildrenNodesDFGS(Tree.Node<State> parent,ArrayList<State> expanded){
 		ArrayList<String> actions=new ArrayList<String>();
 		State currState=parent.getData();
+		System.out.println(currState.printRooms());
 		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
 		if(currState.isActionValid("Up")){
 			//create new state to save change, and apply change
