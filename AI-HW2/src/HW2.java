@@ -71,7 +71,7 @@ public class HW2 {
 		System.out.println("DFGS Instance 2 time: "+((endTimeDFGS2-startTimeDFGS2)/1000000)+" ms");
 		
 	}
-	
+	 
 	public static ArrayList<String> DFGS(State instance){
 		ArrayList<String> path=new ArrayList<String>();
 		ArrayList<State> expanded=new ArrayList<State>();
