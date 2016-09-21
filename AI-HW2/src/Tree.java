@@ -117,7 +117,7 @@ public class Tree<T> {
     				visited.add(child.data);
 	    			Node<T> hold=child.findNode(data,visited);
 	    			if(hold!=null){
-	    				System.out.println("Found same node!");
+//	    				System.out.println("Found same node!");
 	    				return hold;
 	    			}
     			}

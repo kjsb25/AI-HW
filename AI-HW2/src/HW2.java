@@ -75,7 +75,7 @@ public class HW2 {
 		if(!expanded.isEmpty()){
 			System.out.println("Expanded:");
 			for(int i=0;i<10;i++){
-				System.out.println("	"+expanded.get(i));
+				System.out.println(expanded.get(i).printRooms());
 			}
 		}
 		if(!path.isEmpty()){
@@ -83,7 +83,15 @@ public class HW2 {
 			for(String s: path){
 				System.out.println(s);
 			}
-			//put step cost here if needed
+			int cost=0;
+			for(String s: path){
+				if(s.equals("Left") || s.equals("Right")){
+					cost++;
+				}else if(s.equals("Up") || s.equals("Down")){
+					cost+=1.3;
+				}
+			}
+			System.out.println("Step Cost: "+cost);
 		}else{
 			System.out.println("No Path Found : ");
 		}
@@ -93,8 +101,8 @@ public class HW2 {
 	public static int depthSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<State> expanded){
 		//pull in current node's state
 		State currState=currNode.getData();
-		System.out.println(currState.getVacuumX()+","+currState.getVacuumY());
-		System.out.println(currState.printRooms());
+//		System.out.println(currState.getVacuumX()+","+currState.getVacuumY());
+//		System.out.println(currState.printRooms());
 		//check if goal is achieved
 		if(currState.getNumDirty()==0){
 			return 1;
@@ -102,19 +110,19 @@ public class HW2 {
 		//get all children nodes
 		ArrayList<String> actions=getChildrenNodesDFGS(currNode,expanded);
 		int i=0;
-		System.out.println("List of actions:");
-		for(String hold1: actions){
-			System.out.println(hold1);
-		}
-		System.out.println("End List");
-		System.out.println("List of nodes:");
-		for(Tree.Node<State> hold1: currNode.getChildren()){
-			System.out.println("	"+hold1.getData().printRooms());
-		}
-		System.out.println("End List");
+//		System.out.println("List of actions:");
+//		for(String hold1: actions){
+//			System.out.println(hold1);
+//		}
+//		System.out.println("End List");
+//		System.out.println("List of nodes:");
+//		for(Tree.Node<State> hold1: currNode.getChildren()){
+//			System.out.println("	"+hold1.getData().printRooms());
+//		}
+//		System.out.println("End List");
 		for(Tree.Node<State> hold: currNode.getChildren()){
-			System.out.print(currNode.getChildren().size()+" ");
-			System.out.println(actions.size());
+//			System.out.print(currNode.getChildren().size()+" ");
+//			System.out.println(actions.size());
 
 			boolean isExpanded=false;
 			for(State hold2: expanded){
@@ -125,7 +133,7 @@ public class HW2 {
 			if(!isExpanded){
 				expanded.add(hold.getData());
 				//System.out.println(expanded.toString());
-				System.out.println(expanded.size());
+//				System.out.println(expanded.size());
 				path.add(actions.get(i));
 				int result=depthSearch(hold, path, expanded);
 				if(result==0){
@@ -172,7 +180,15 @@ public class HW2 {
 			for(String s: path){
 				System.out.println(s);
 			}
-			//put step cost here if needed
+			int cost=0;
+			for(String s: path){
+				if(s.equals("Left") || s.equals("Right")){
+					cost++;
+				}else if(s.equals("Up") || s.equals("Down")){
+					cost+=1.3;
+				}
+			}
+			System.out.println("Step Cost: "+cost);
 		}else{
 			System.out.println("No Path Found : ");
 		}
@@ -350,7 +366,7 @@ public class HW2 {
 				//Check if node already exists
 				Tree.Node<State> hold=parent.findNode(DownState,new ArrayList<State>());
 				if(hold!=null && !hold.getChildren().contains(parent)){
-					System.out.println("Hold was indeed null");
+//					System.out.println("Hold was indeed null");
 					hold.addEdge(parent);		
 				}else{
 					//add node with state to graph
