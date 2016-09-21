@@ -36,19 +36,19 @@ public class HW2 {
 		dirty2.add(new DirtyIndex(5,6));
 		
 		State instance2=new State(5,6,dirty2,3,2, "");
-//		System.out.println("Starting IDS:");
-//		long startTimeIDS1=System.nanoTime();
-//		ArrayList<String> path1=IDS(instance1);
-//		long endTimeIDS1=System.nanoTime();
-//
-//		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
-//		
-//		
-//		long startTimeIDS2=System.nanoTime();
-//		ArrayList<String> path2=IDS(instance2);
-//		long endTimeIDS2=System.nanoTime();
+		System.out.println("Starting IDS:");
+		long startTimeIDS1=System.nanoTime();
+		ArrayList<String> path1=IDS(instance1);
+		long endTimeIDS1=System.nanoTime();
+
+		System.out.println("IDS Instance 1 time: "+((endTimeIDS1-startTimeIDS1)/1000000)+" ms");
 		
-//		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
+		
+		long startTimeIDS2=System.nanoTime();
+		ArrayList<String> path2=IDS(instance2);
+		long endTimeIDS2=System.nanoTime();
+		
+		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
 		
 				
 		State instance1_DFGS=new State(4,4,dirty1,3,2, "");
@@ -62,6 +62,12 @@ public class HW2 {
 		ArrayList<String> DFGSpath1=DFGS(instance1_DFGS);
 		long endTimeDFGS1=System.nanoTime();
 
+		
+		long startTimeDFGS2=System.nanoTime();
+		ArrayList<String> DFGSpath2=DFGS(instance2_DFGS);
+		long endTimeDFGS2=System.nanoTime();
+
+		System.out.println("DFGS Instance 2 time: "+((endTimeDFGS2-startTimeDFGS2)/1000000)+" ms");
 		
 	}
 	
@@ -142,7 +148,6 @@ public class HW2 {
 				}
 				i++;
 			}
-			
 		}
 		return 0;
 	}
@@ -153,20 +158,16 @@ public class HW2 {
 
 		
 		ArrayList<String> path=new ArrayList<String>();
-		boolean done=false;
-		ArrayList<String> expanded=new ArrayList<String>();
-		while(maxDepth<programLimit && !done){
+		int done=0;
+		ArrayList<State> expanded=new ArrayList<State>();
+		while(maxDepth<programLimit && done!=1){
+			System.out.println("DFS with depth "+maxDepth+" started.");
 			expanded.clear();
 
 			Tree<State> graph=new Tree<State>(instance);
-			path=depthLimitedSearch(graph.getRoot(),path,expanded,0,maxDepth);
-
-			if(path.isEmpty()){
-				System.out.println("Depth of "+maxDepth+" failed");
-				maxDepth++;
-			}else{
-				done=true;
-			}
+			done=depthLimitedSearch(graph.getRoot(),path,expanded,0,maxDepth);
+			System.out.println(maxDepth+" failed.");
+			maxDepth++;
 		}
 		if(!expanded.isEmpty()){
 			System.out.println("Expanded:");
@@ -195,32 +196,48 @@ public class HW2 {
 		
 	}
 	
-	public static ArrayList<String> depthLimitedSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<String> expanded,int currDepth,int depthLimit){
+	public static int depthLimitedSearch(Tree.Node<State> currNode,ArrayList<String> path,ArrayList<State> expanded,int currDepth,int depthLimit){
 		//pull in current node's state
 		State currState=currNode.getData();
 		//check if goal is achieved
 		if(currState.getNumDirty()==0){
-			//add current action to list, and return. Checks if it's the root first though.
-			if(currState.getPredecessorAction()!=""){
-				path.add(currState.getPredecessorAction());
-			}
-			return path;
-			//check if depth limit is reached
+			//if solved, return end value
+			return 1;
+		//check if depth limit is reached
 		}else if(currDepth==depthLimit){
-			//returning the same list that was input is regarded as a failure
-			return path;
+			//return fail
+			return 0;
 		}
 		//save path size
 		int pathLength=path.size();
 		//find all children nodes
-		getChildrenNodesIDS(currNode,expanded);
+		ArrayList<String> actions=getChildrenNodesDFGS(currNode,expanded);
+		int i=0;
 		for(Tree.Node<State> hold: currNode.getChildren()){
-			path=depthLimitedSearch(hold, path, expanded,currDepth+1, depthLimit);
-			if(pathLength!=path.size()){
-				return path;
+//			System.out.print(currNode.getChildren().size()+" ");
+//			System.out.println(actions.size());
+
+			boolean isExpanded=false;
+			for(State hold2: expanded){
+				if(hold.getData().equals(hold2)){
+					isExpanded=true;
+				}
+			}
+			if(!isExpanded){
+				expanded.add(hold.getData());
+				//System.out.println(expanded.toString());
+//				System.out.println(expanded.size());
+				path.add(actions.get(i));
+				int result=depthLimitedSearch(hold, path, expanded, currDepth+1, depthLimit);
+				if(result==0){
+					path.remove(path.size()-1);
+				}else{
+					return 1;
+				}
+				i++;
 			}
 		}
-		return path;
+		return 0;
 	}
 	
 	public static void getChildrenNodesIDS(Tree.Node<State> parent,ArrayList<String> expanded){
@@ -281,6 +298,7 @@ public class HW2 {
 	public static ArrayList<String> getChildrenNodesDFGS(Tree.Node<State> parent,ArrayList<State> expanded){
 		ArrayList<String> actions=new ArrayList<String>();
 		State currState=parent.getData();
+		System.out.println(currState.printRooms());
 		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
 		if(currState.isActionValid("Up")){
 			//create new state to save change, and apply change
