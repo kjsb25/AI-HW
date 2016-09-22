@@ -27,7 +27,35 @@ public class Tree<T> {
         private T data;
         private Node<T> parent;
         private List<Node<T>> children;
+        private double gCost;
+        private double fCost;
+//        private ArrayList<String> Path;
+        
+//        public ArrayList<String> getPath() {
+//			return Path;
+//		}
 
+//		public void setPath(ArrayList<String> path) {
+//			Path = path;
+//		}
+
+		public double getgCost() {
+			return gCost;
+		}
+
+		public void setgCost(double gCost) {
+			this.gCost = gCost;
+		}
+
+		public double getfCost() {
+			return fCost;
+		}
+
+		public void setfCost(double fCost) {
+			this.fCost = fCost;
+		}
+
+        
         public Node(T data) {
             this.data = data;
             this.children = new ArrayList<Node<T>>();
@@ -37,6 +65,15 @@ public class Tree<T> {
             this.data = data;
             this.parent = parent;
             this.children = new ArrayList<Node<T>>();
+        }
+        
+        //constructor used in a*
+        public Node(T data,double gCost,double fCost){
+        	this.data = data;
+            this.children = new ArrayList<Node<T>>();
+            this.gCost=gCost;
+            this.fCost=fCost;
+//            this.Path.c;
         }
         
         public List<Node<T>> getChildren() {

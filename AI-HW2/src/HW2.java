@@ -51,27 +51,31 @@ public class HW2 {
 //		System.out.println("IDS Instance 2 time: "+((endTimeIDS2-startTimeIDS2)/1000000)+" ms");
 		
 				
-		State instance1_DFGS=new State(4,4,dirty1,3,2, "");
-			
-				
-		State instance2_DFGS=new State(5,6,dirty2,3,2, "");
-		
-		System.out.println("Starting DFGS:");
-		
-		long startTimeDFGS1=System.nanoTime();
-		ArrayList<String> DFGSpath1=DFGS(instance1_DFGS);
-		long endTimeDFGS1=System.nanoTime();
-
-		System.out.println("DFGS Instance 1 time: "+((endTimeDFGS1-startTimeDFGS1)/1000000)+" ms");
-		
-		long startTimeDFGS2=System.nanoTime();
-		ArrayList<String> DFGSpath2=DFGS(instance2_DFGS);
-		long endTimeDFGS2=System.nanoTime();
-
-		System.out.println("DFGS Instance 2 time: "+((endTimeDFGS2-startTimeDFGS2)/1000000)+" ms");
-		
+//		State instance1_DFGS=new State(4,4,dirty1,3,2, "");
+//			
+//				
+//		State instance2_DFGS=new State(5,6,dirty2,3,2, "");
+//		
+//		System.out.println("Starting DFGS:");
+//		
+//		long startTimeDFGS1=System.nanoTime();
+//		ArrayList<String> DFGSpath1=DFGS(instance1_DFGS);
+//		long endTimeDFGS1=System.nanoTime();
+//
+//		System.out.println("DFGS Instance 1 time: "+((endTimeDFGS1-startTimeDFGS1)/1000000)+" ms");
+//		
+//		long startTimeDFGS2=System.nanoTime();
+//		ArrayList<String> DFGSpath2=DFGS(instance2_DFGS);
+//		long endTimeDFGS2=System.nanoTime();
+//
+//		System.out.println("DFGS Instance 2 time: "+((endTimeDFGS2-startTimeDFGS2)/1000000)+" ms");
+		System.out.println("Starting APrime:");
+		long startTimeA=System.nanoTime();
+		ArrayList<String> path1=APrime(instance1);
+		long endTimeA=System.nanoTime();
+		System.out.println("IDS Instance 2 time: "+((endTimeA-startTimeA)/1000000)+" ms");
 	}
-	 
+ 
 	public static ArrayList<String> DFGS(State instance){
 		ArrayList<String> path=new ArrayList<String>();
 		ArrayList<State> expanded=new ArrayList<State>();
@@ -384,6 +388,166 @@ public class HW2 {
 			//expanded.add(DownState);
 		}
 		return actions;
+	}
+	
+	public static ArrayList<String> ASearchChildren(Tree.Node<State> parent){
+		ArrayList<String> actions=new ArrayList<String>();
+		State currState=parent.getData();
+		System.out.println(currState.printRooms());
+		//Chunk of choosing logic is in here, if order are wrong then this is the place to look
+		if(currState.isActionValid("Up")){
+			//create new state to save change, and apply change
+			State UpState=new State(currState);
+			UpState.setVacuumX(currState.getVacuumX()-1);
+			
+			//check if state has already been expanded
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(UpState,new ArrayList<State>());
+				if(hold!=null && !hold.getChildren().contains(parent)){
+					hold.addEdge(parent);		
+				}else{
+					//add node with state to graph
+					Tree.Node<State> newNode = new Tree.Node<State>(UpState,(parent.getgCost()+1.3),(parent.getfCost()+1.3));
+					parent.addEdge(newNode);
+				}
+				actions.add("Up");
+//			expanded.add(UpState);
+		}
+		if(currState.isActionValid("Left")){
+			//create new state to save change, and apply change
+			State LeftState=new State(currState);
+			LeftState.setVacuumY(currState.getVacuumY()-1);
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(LeftState,new ArrayList<State>());
+				if(hold!=null && !hold.getChildren().contains(parent)){
+					hold.addEdge(parent);			
+				}else{
+					//add node with state to graph
+					//add node with state to graph
+					Tree.Node<State> newNode = new Tree.Node<State>(LeftState,(parent.getgCost()+1),(parent.getfCost()+1));
+					parent.addEdge(newNode);
+				}
+				actions.add("Left");
+//			expanded.add(LeftState);
+		}
+		if(currState.isActionValid("Suck")){
+			
+			//create new state to save changes, and change
+			State SuckState=new State(currState);
+			SuckState.CleanCurrRoom();
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(SuckState,new ArrayList<State>());
+				if(hold!=null && !hold.getChildren().contains(parent)){
+					hold.addEdge(parent);		
+				}else{
+					//add node with state to graph
+					Tree.Node<State> newNode = new Tree.Node<State>(SuckState,parent.getgCost(),(parent.getgCost()+SuckState.getNumDirty()));
+					parent.addEdge(newNode);
+				}
+				actions.add("Suck");
+//			expanded.add(SuckState);
+		}
+		if(currState.isActionValid("Right")){
+			//create new state to save changes, and change
+			State RightState=new State(currState);
+			RightState.setVacuumY(currState.getVacuumY()+1);
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(RightState,new ArrayList<State>());
+				if(hold!=null && !hold.getChildren().contains(parent)){
+					hold.addEdge(parent);		
+				}else{
+					//add node with state to graph
+					//add node with state to graph
+					Tree.Node<State> newNode = new Tree.Node<State>(RightState,(parent.getgCost()+1),(parent.getfCost()+1));
+					parent.addEdge(newNode);
+				}
+				actions.add("Right");
+//			expanded.add(RightState);
+		}
+		if(currState.isActionValid("Down")){
+			//create new state to save changes, and change
+			State DownState=new State(currState);
+			DownState.setVacuumX(currState.getVacuumX()+1);
+				//Check if node already exists
+				Tree.Node<State> hold=parent.findNode(DownState,new ArrayList<State>());
+				if(hold!=null && !hold.getChildren().contains(parent)){
+//					System.out.println("Hold was indeed null");
+					hold.addEdge(parent);		
+				}else{
+					//add node with state to graph
+					Tree.Node<State> newNode = new Tree.Node<State>(DownState,(parent.getgCost()+1.3),(parent.getfCost()+1.3));
+					parent.addEdge(newNode);
+				}
+				actions.add("Down");
+			//expanded.add(DownState);
+		}
+		return actions;
+	}
+	
+	public static ArrayList<String> APrime(State start) {
+		//holds path
+		ArrayList<String> path = new ArrayList<String>();
+		//open nodes
+		ArrayList<Tree.Node<State>> open = new ArrayList<Tree.Node<State>>();
+		//closed nodes
+		ArrayList<Tree.Node<State>> closed = new ArrayList<Tree.Node<State>>();
+		//initialize root node
+		Tree.Node<State> root = new Tree.Node<State>(start,0,start.getNumDirty());
+		//start recursive Aprime search
+		int result = Asearch(root,open,closed);
+		//return path
+		return path;
+	}
+	
+	public static int Asearch(Tree.Node<State> currNode,ArrayList<Tree.Node<State>> open,ArrayList<Tree.Node<State>> closed) {
+		//get children of current node and actions taken to get there
+		ArrayList<String> actions=ASearchChildren(currNode);
+		//loop through children
+		for(Tree.Node<State> hold : currNode.getChildren()) {
+			//bools to be used later
+			boolean check1=false;
+			boolean check2=false;
+			//check to see if all the roooms are clean
+			if(hold.getData().getNumDirty()==0) {
+				return 1;
+			}
+			//loop thorugh open
+			for(Tree.Node<State> temp : open) {
+				//if child exists in open, compare f scores and update if necessary
+				if(hold.getData().equals(temp.getData())&&hold.getfCost()<temp.getfCost()) { 
+					temp.setfCost(hold.getfCost());
+					temp.setgCost(hold.getgCost());
+					check1=true;
+				}
+			}
+			//if child exists in closed, compare f scores and update if necessary
+			for(Tree.Node<State> temp : closed) {
+				if(hold.getData().equals(temp.getData())&&hold.getfCost()<temp.getfCost()) { 
+					temp.setfCost(hold.getfCost());
+					temp.setgCost(hold.getgCost());
+					check2=true;
+				}
+			}
+			//if child was not in open or closed add it to open
+			if(check1==false&&check2==false) {
+				open.add(hold);
+			}
+		}
+		//add current node to closed
+		closed.add(currNode);
+		//if open is empty return failure
+		if(open.size()==0) {
+			return 0;
+		}
+		//pop off next node from open
+		Tree.Node<State> nextNode = open.get(open.size()-1);
+		open.remove(open.size()-1);
+		//recursive call
+		if(Asearch(nextNode,open,closed)==0) {
+			return 0;
+		}
+		else
+			return 1;
 	}
 }
 
