@@ -1,1 +1,5 @@
-# AI-HW1
+# AI-HW
+
+
+Keenan Shumard
+Jack Schaper
