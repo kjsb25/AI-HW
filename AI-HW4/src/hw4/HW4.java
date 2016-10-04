@@ -6,5 +6,7 @@ public class HW4 {
 		// TODO Auto-generated method stub
 
 	}
+	
+	//may just implement players here, while they are technically objects it just seems easier to implement them as functions....
 
 }
