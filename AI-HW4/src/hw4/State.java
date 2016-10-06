@@ -47,11 +47,11 @@ public class State {
 
 	public boolean markPosition(int x, int y,char symbol){
 		if(x>BoardLength || x<=0 || y>BoardLength || y<=0){
-			System.out.print("Invalid position passed to markPosition");
+//			System.out.print("Invalid position passed to markPosition");
 			return false;
 		}
 		if(symbol!='X' && symbol!='O'){
-			System.out.print("Invalid symbol passed to markPosition");
+//			System.out.print("Invalid symbol passed to markPosition");
 			return false;
 		}
 		x--;
