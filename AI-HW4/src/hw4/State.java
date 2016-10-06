@@ -63,6 +63,16 @@ public class State {
 		return true;
 	}
 	
+	/**
+	 * Find if there is an open end for two in a row for the symbol, and returns coordinates of that position
+	 * 
+	 * @param symbol
+	 * @param board
+	 */
+	public static void isTwoInARowOpen(char symbol, State board){
+		
+	}
+	
 	public char[][] getBoard() {
 		return board;
 	}
@@ -71,7 +81,4 @@ public class State {
 		this.board = board;
 	}
 	
-	
-	
-
 }

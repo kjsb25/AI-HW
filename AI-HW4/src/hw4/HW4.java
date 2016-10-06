@@ -18,14 +18,13 @@ public class HW4 {
 		return newState;
 	}
 	
-	/**
-	 * Find if there is an open end for two in a row for the symbol, and returns coordinates of that position
-	 * 
-	 * @param symbol
-	 * @param board
-	 */
-	public static void isTwoInARowOpen(char symbol, State board){
-		
+	public static boolean userDecision(char symbol){
+		if(symbol!='O' && symbol!='X'){
+			return false;
+		}
+		System.out.print("Select a coordinate where you would like ");
+		return true;
 	}
+	
 
 }
