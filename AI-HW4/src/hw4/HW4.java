@@ -1,5 +1,6 @@
 package hw4;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class HW4 {
@@ -8,13 +9,14 @@ public class HW4 {
 		State currState=new State();
 		currState.printBoard();
 		char player='O';
-		while(!currState.win){
+//		while(!currState.win){
+			currState=AdvancedDecision(currState, player);
 //			currState = BeginnerDecision(currState, 'O');
 //			currState.printBoard();
-			currState=userDecision(currState,player);
-			currState.printBoard();
-			System.out.print(terminalTest(currState));
-		}
+//			currState=userDecision(currState,player);
+//			currState.printBoard();
+//			System.out.print(terminalTest(currState));
+//		}
 	
 	}
 	
@@ -39,14 +41,46 @@ public class HW4 {
 		if(state.isTwoInARowOpen(symbol, symbol, newState)){
 			return newState;
 		}
-//		MiniMaxDecision(newState,2);
+		newState=MiniMaxDecision(newState,symbol,2);
 		
 		return newState;
 	}
 	
-	public static void MinMaxDecision(State state, int ply){
+	public static State MiniMaxDecision(State state, char symbol, int ply){
+		State newState=new State(state);
 		
+		ArrayList<State> children=getChildrenStates(state,symbol);
+		for(State child: children){
+			
+		}
 		
+		return newState;
+	}
+	
+	/**
+	 * Returns an arraylist of states that are all the possible moves that could be made from the passed in state
+	 * 
+	 * @param starting
+	 * @param symbol
+	 * @return arraylist, but a blank one if a failure occured
+	 */
+	public static ArrayList<State> getChildrenStates(State starting, char symbol){
+		ArrayList<State> children=new ArrayList<State>();
+		
+		for(int i=1;i<=State.BoardLength;i++){
+			for(int j=1;j<=State.BoardLength;j++){
+				if(starting.valueAtPos(i,j)==' '){
+					State child=new State(starting);
+					if(child.markPosition(i, j, symbol)){
+						children.add(child);
+					}else{
+						System.out.print("Error in getChildrenStates");
+						return new ArrayList<State>();
+					}
+				}
+			}
+		}
+		return children;
 	}
 	
 	/**
