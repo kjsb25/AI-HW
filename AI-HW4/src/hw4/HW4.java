@@ -39,27 +39,29 @@ public class HW4 {
 		if(state.isTwoInARowOpen(symbol, symbol, newState)){
 			return newState;
 		}
-		MiniMaxDecision(newState,2);
+//		MiniMaxDecision(newState,2);
 		
 		return newState;
 	}
 	
-	public static void MiniMaxDecision(State state, int ply){
+	public static void MinMaxDecision(State state, int ply){
 		
 		
 	}
 	
 	/**
-	 * Checks if any players won
+	 * Checks if any players won, or no nodes are free
 	 * 
 	 * @param state
-	 * @return symbol of winning player, F if no one is winning
+	 * @return symbol of winning player, F if no one is winning, and D if the board is full
 	 */
 	public static char terminalTest(State state){
 		if(state.checkforWin('X')){
 			return 'X';
 		}else if(state.checkforWin('O')){
 			return 'O';
+		}else if(state.isBoardFull()){
+			return 'D';
 		}else{
 			return 'F';
 		}

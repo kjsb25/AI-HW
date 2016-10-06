@@ -163,12 +163,26 @@ public class State {
 		//checks diagonal
 		result=true;
 		for(int i=-1;i<=1 && result;i++){
-			if((x+i)>=0 && (y+i)>=0 && (x+i)<(BoardLength-1) && (y+i)<(BoardLength-1)){
+			if((x+i)>=0 && (y+i)>=0 && (x+i)<(BoardLength) && (y+i)<(BoardLength)){
 				if(board[x+i][y+i]!=symbol){
 					result=false;
 				}
 			}else{
-				return false;
+				result=false;
+			}
+		}
+		if(result){
+			return true;
+		}
+		//checks diagonal
+		result=true;
+		for(int i=-1;i<=1 && result;i++){
+			if((x+i)>=0 && (y-i)>=0 && (x+i)<(BoardLength) && (y-i)<(BoardLength)){
+				if(board[x+i][y-i]!=symbol){
+					result=false;
+				}
+			}else{
+				result=false;
 			}
 		}
 		return result;
@@ -208,6 +222,17 @@ public class State {
 			}
 		}
 		return false;
+	}
+	
+	public boolean isBoardFull(){
+		for(int i=0;i<BoardLength;i++){
+			for(int j=0;j<BoardLength;j++){
+				if(board[i][j]==' '){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	public char[][] getBoard() {
