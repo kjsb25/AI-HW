@@ -56,12 +56,12 @@ public class HW4 {
 	 * @return symbol of winning player, F if no one is winning, and D if the board is full
 	 */
 	public static char terminalTest(State state){
-		if(state.checkforWin('X')){
+		if(state.isBoardFull()){
+			return 'D';
+		}else if(state.checkforWin('X')){
 			return 'X';
 		}else if(state.checkforWin('O')){
 			return 'O';
-		}else if(state.isBoardFull()){
-			return 'D';
 		}else{
 			return 'F';
 		}
