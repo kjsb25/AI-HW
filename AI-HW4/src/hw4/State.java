@@ -4,6 +4,7 @@ package hw4;
 public class State {
 	public char[][] board;
 	static final int BoardLength=4;
+	public int heuristic=0;
 	public boolean win=false;
 
 	public State() {
@@ -73,6 +74,9 @@ public class State {
 			return false;
 		}
 		board[x][y]=symbol;
+//		calcHeuristic(symbol);
+//		this.printBoard();
+//		System.out.println(heuristic);
 		return true;
 	}
 	
@@ -293,6 +297,25 @@ public class State {
 		return count;
 	}
 	
+	
+	public int getHeuristic() {
+		return heuristic;
+	}
+
+
+	public void calcHeuristic(char symbol) {
+		char oppSymbol=' ';
+		if(symbol=='X'){
+			oppSymbol='O';
+		}else if(symbol=='O'){
+			oppSymbol='X';
+		}else{
+			System.out.print("Symbol error in calcHeuristic");
+		}
+		this.heuristic = countTwoInARow(symbol, this)-countTwoInARow(oppSymbol, this);
+	}
+
+
 	public char[][] getBoard() {
 		return board;
 	}

@@ -10,27 +10,31 @@ public class HW4 {
 		currState.printBoard();
 		char player='X';
 		int fuckit =0;
+//		while(!currState.win){
+//			currState = BeginnerDecision(currState, 'O');
+//			currState.printBoard();
+//			fuckit = currState.countTwoInARow('O', currState);
+//			System.out.println(fuckit);
+//			if(currState.win==true){
+//				System.out.print("Begginer AI wins!\n");
+//				break;
+//			}
+//			currState=userDecision(currState,player);
+//			currState.printBoard();
+//		}
 		while(!currState.win){
 			currState = BeginnerDecision(currState, 'O');
 			currState.printBoard();
-			fuckit = currState.countTwoInARow('O', currState);
-			System.out.println(fuckit);
 			if(currState.win==true){
-				System.out.print("Begginer AI wins!\n");
+				System.out.print("Beginner wins!\n");
 				break;
 			}
-			currState=userDecision(currState,player);
-			System.out.println(currState.win);
+			currState=AdvancedDecision(currState,'X');
+			if(currState.win==true){
+				System.out.print("Advanced wins!\n");
+				break;
+			}
 			currState.printBoard();
-			fuckit = currState.countTwoInARow('X', currState);
-			System.out.println(fuckit);
-			if(terminalTest(currState)==('X')){
-				System.out.print("You win!\n");
-				break;
-			}
-			if(terminalTest(currState)==('D'))
-				break;
-			System.out.print(terminalTest(currState));
 		}
 		
 		System.out.print("GAME OVER\n");
@@ -58,8 +62,19 @@ public class HW4 {
 	}
 	
 	public static State AdvancedDecision(State state,char symbol){
+		System.out.println("herhe");
 		State newState=new State(state);
+		char oppSymbol=' ';
+		if(symbol=='X'){
+			oppSymbol='O';
+		}else if(symbol=='O'){
+			oppSymbol='X';
+		}
 		if(state.isTwoInARowOpen(symbol, symbol, newState)){
+			System.out.println("tried to win");
+			return newState;
+		}else if(newState.isTwoInARowOpen(oppSymbol,symbol,newState)) {
+			System.out.println("tried to block");
 			return newState;
 		}
 		newState=MiniMaxDecision(newState,symbol,2);
@@ -67,15 +82,79 @@ public class HW4 {
 		return newState;
 	}
 	
-	public static State MiniMaxDecision(State state, char symbol, int ply){
+	public static State MasterDecision(State state,char symbol){
+		System.out.println("herhe");
 		State newState=new State(state);
-		
-		ArrayList<State> children=getChildrenStates(state,symbol);
-		for(State child: children){
-			
+		char oppSymbol=' ';
+		if(symbol=='X'){
+			oppSymbol='O';
+		}else if(symbol=='O'){
+			oppSymbol='X';
 		}
+		if(state.isTwoInARowOpen(symbol, symbol, newState)){
+			System.out.println("tried to win");
+			return newState;
+		}else if(newState.isTwoInARowOpen(oppSymbol,symbol,newState)) {
+			System.out.println("tried to block");
+			return newState;
+		}
+		newState=MiniMaxDecision(newState,symbol,4);
 		
 		return newState;
+	}
+	
+	public static State MiniMaxDecision(State state, char symbol, int ply){
+		State newState=new State(state);
+		char oppSymbol=' ';
+		if(symbol=='X'){
+			oppSymbol='O';
+		}else if(symbol=='O'){
+			oppSymbol='X';
+		}
+		ArrayList<State> children=getChildrenStates(state,symbol);
+		int max=Integer.MIN_VALUE;
+		int hold;
+		for(State child: children){
+			hold=minValue(child,ply-1,symbol,oppSymbol);
+			System.out.println(hold);
+			if(hold>max){
+				max=hold;
+				newState=child;
+			}
+		}
+		System.out.println(max);
+		return newState;
+	}
+	
+	public static int minValue(State state,int depth,char symbol,char oppSymbol){
+		if(terminalTest(state) || depth==0){
+			state.calcHeuristic(symbol);
+//			state.printBoard();
+//			System.out.println(state.heuristic);
+			return state.heuristic;
+		}
+		
+		int min=Integer.MAX_VALUE;
+		ArrayList<State> children=getChildrenStates(state,oppSymbol);
+		for(State child: children){
+			min=Integer.min(min, maxValue(child,depth-1,symbol,oppSymbol));
+		}
+		return min;
+	}
+	
+	public static int maxValue(State state,int depth,char symbol,char oppSymbol){
+		if(terminalTest(state) || depth==0){
+			state.calcHeuristic(symbol);
+//			state.printBoard();
+//			System.out.println(state.heuristic);
+			return state.heuristic;
+		}
+		int v=Integer.MIN_VALUE;
+		ArrayList<State> children=getChildrenStates(state,symbol);
+		for(State child: children){
+			v=Integer.max(v, minValue(child,depth-1,symbol,oppSymbol));
+		}
+		return v;
 	}
 	
 	/**
@@ -110,15 +189,15 @@ public class HW4 {
 	 * @param state
 	 * @return symbol of winning player, F if no one is winning, and D if the board is full
 	 */
-	public static char terminalTest(State state){
+	public static boolean terminalTest(State state){
 		if(state.isBoardFull()){
-			return 'D';
+			return true;
 		}else if(state.checkforWin('X')){
-			return 'X';
+			return true;
 		}else if(state.checkforWin('O')){
-			return 'O';
+			return true;
 		}else{
-			return 'F';
+			return false;
 		}
 	}
 	
