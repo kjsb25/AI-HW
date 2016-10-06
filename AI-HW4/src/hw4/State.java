@@ -65,10 +65,10 @@ public class State {
 	
 	/**
 	 * 
-	 * @param search
-	 * @param placement
-	 * @param board
-	 * @return
+	 * @param search is the symbol we are looking for
+	 * @param placement is the symbol we will place
+	 * @param board is the board
+	 * @return 0 for no option to block or win, 1 for block, 2 for win
 	 */
 	public static int isTwoInARowOpen(char search, char placement, State board){
 		//loop through board
