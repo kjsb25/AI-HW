@@ -10,16 +10,24 @@ public class HW4 {
 		char player='X';
 		while(!currState.win){
 			currState = BeginnerDecision(currState, 'O');
-			System.out.println(currState.win);
 			currState.printBoard();
-			if(currState.win==true)
+			if(currState.win==true){
+				System.out.print("Begginer AI wins!\n");
 				break;
+			}
 			currState=userDecision(currState,player);
 			System.out.println(currState.win);
 			currState.printBoard();
-			if(currState.win==true)
-				System.out.println("\n\nConfusion\n\n");
+			if(terminalTest(currState)==('X')){
+				System.out.print("You win!\n");
+				break;
+			}
+			if(terminalTest(currState)==('D'))
+				break;
+			System.out.print(terminalTest(currState));
 		}
+		
+		System.out.print("GAME OVER\n");
 	
 	}
 	
@@ -42,6 +50,39 @@ public class HW4 {
 		return newState;
 	}
 	
+	public static State AdvancedDecision(State state,char symbol){
+		State newState=new State(state);
+		if(state.isTwoInARowOpen(symbol, symbol, newState)){
+			return newState;
+		}
+//		MiniMaxDecision(newState,2);
+		
+		return newState;
+	}
+	
+	public static void MinMaxDecision(State state, int ply){
+		
+		
+	}
+	
+	/**
+	 * Checks if any players won, or no nodes are free
+	 * 
+	 * @param state
+	 * @return symbol of winning player, F if no one is winning, and D if the board is full
+	 */
+	public static char terminalTest(State state){
+		if(state.isBoardFull()){
+			return 'D';
+		}else if(state.checkforWin('X')){
+			return 'X';
+		}else if(state.checkforWin('O')){
+			return 'O';
+		}else{
+			return 'F';
+		}
+	}
+	
 	public static State userDecision(State state,char symbol){
 		State newState=new State(state);
 		
@@ -51,7 +92,7 @@ public class HW4 {
 		String input_string;
 		boolean input_valid=false;
 		
-		//while a move hasnt been made
+		//while a move hasn't been made
 		while(!input_valid){
 			//print prompt and scan input
 			System.out.print("Select x and y coordinates:");
@@ -77,7 +118,6 @@ public class HW4 {
 			}
 			input.close();
 		}
-//		reader.close();
 		return newState;
 	}
 	

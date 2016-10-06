@@ -126,6 +126,76 @@ public class State {
 		return false;
 	}
 	
+	public boolean checkforWin(char symbol){
+		for(int i=0;i<BoardLength;i++){
+			for(int j=0;j<BoardLength;j++){
+				if(board[i][j]==symbol){
+					if(checkNeighbors(i,j,symbol)){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean checkNeighbors(int x, int y,char symbol){
+		boolean result=true;
+		//checks vertical row
+		for(int i=(x-1);i<=x+1 && result;i++){
+			if(i>=0 && i<BoardLength){
+				if(board[i][y]!=symbol){
+					result=false;
+				}
+			}else{
+				result=false;
+			}
+		}
+		if(result){
+			return true;
+		}
+		//checks horizontal row
+		result=true;
+		for(int j=(y-1);j<=y+1 && result;j++){
+			if(j>=0 && j<BoardLength){
+				if(board[x][j]!=symbol){
+					result=false;
+				}
+			}else{
+				result=false;
+			}
+		}
+		if(result){
+			return true;
+		}
+		//checks diagonal
+		result=true;
+		for(int i=-1;i<=1 && result;i++){
+			if((x+i)>=0 && (y+i)>=0 && (x+i)<(BoardLength) && (y+i)<(BoardLength)){
+				if(board[x+i][y+i]!=symbol){
+					result=false;
+				}
+			}else{
+				result=false;
+			}
+		}
+		if(result){
+			return true;
+		}
+		//checks diagonal
+		result=true;
+		for(int i=-1;i<=1 && result;i++){
+			if((x+i)>=0 && (y-i)>=0 && (x+i)<(BoardLength) && (y-i)<(BoardLength)){
+				if(board[x+i][y-i]!=symbol){
+					result=false;
+				}
+			}else{
+				result=false;
+			}
+		}
+		return result;
+	}
+	
 	public static boolean checkLocation(State board, char placement, int x, int y, String direction) {
 		System.out.println("Made it to check location\n");
 		System.out.println(direction);
@@ -174,6 +244,17 @@ public class State {
 			}
 		}
 		return false;
+	}
+	
+	public boolean isBoardFull(){
+		for(int i=0;i<BoardLength;i++){
+			for(int j=0;j<BoardLength;j++){
+				if(board[i][j]==' '){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	public char[][] getBoard() {
