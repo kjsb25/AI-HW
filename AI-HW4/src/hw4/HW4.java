@@ -8,9 +8,12 @@ public class HW4 {
 		State currState=new State();
 		currState.printBoard();
 		char player='X';
+		int fuckit =0;
 		while(!currState.win){
 			currState = BeginnerDecision(currState, 'O');
 			currState.printBoard();
+			fuckit = currState.countTwoInARow('O', currState);
+			System.out.println(fuckit);
 			if(currState.win==true){
 				System.out.print("Begginer AI wins!\n");
 				break;
@@ -18,6 +21,8 @@ public class HW4 {
 			currState=userDecision(currState,player);
 			System.out.println(currState.win);
 			currState.printBoard();
+			fuckit = currState.countTwoInARow('X', currState);
+			System.out.println(fuckit);
 			if(terminalTest(currState)==('X')){
 				System.out.print("You win!\n");
 				break;
