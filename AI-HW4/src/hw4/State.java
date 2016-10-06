@@ -64,13 +64,93 @@ public class State {
 	}
 	
 	/**
-	 * Find if there is an open end for two in a row for the symbol, and returns coordinates of that position
 	 * 
-	 * @param symbol
+	 * @param search
+	 * @param placement
 	 * @param board
+	 * @return
 	 */
-	public static void isTwoInARowOpen(char symbol, State board){
-		
+	public static int isTwoInARowOpen(char search, char placement, State board){
+		//loop through board
+		for(int i=0;i<BoardLength;i++){
+			for(int j=0;j<BoardLength;j++){
+				//find the symbol we are searching for
+				if(board.getBoard()[i][j]==search) {
+					//check to see if symbol has a match in any possible direction
+					//(downleft,left,upleft, and up are not possible because of how we are searching)
+					//if 2 in a row are found we will check if there is a 3rd spot available
+					if(j-1>=0&&i+1<BoardLength&&board.getBoard()[i+1][j-1]==search) {
+						if(checkLocation(board,placement,i,j,"upRight")) {
+							if(search==placement) {
+								return 2;
+							}
+							return 1;
+						}
+					}
+					if(i+1<BoardLength&&board.getBoard()[i+1][j]==search) {
+						if(checkLocation(board,placement,i,j,"right")) {
+							if(search==placement) {
+								return 2;
+							}
+							return 1;
+						}
+					}
+					if(j+1<BoardLength&&i+1<BoardLength&&board.getBoard()[i+1][j+1]==search) {
+						if(checkLocation(board,placement,i,j,"downRight")) {
+							if(search==placement) {
+								return 2;
+							}
+							return 1;
+						}
+					}
+					if(j+1<BoardLength&&i+1<BoardLength&&board.getBoard()[i+1][j+1]==search) {
+						if(checkLocation(board,placement,i,j,"down")) {
+							if(search==placement) {
+								return 2;
+							}
+							return 1;
+						}
+					}
+				}
+			}
+		}
+		return 0;
+	}
+	
+	public static boolean checkLocation(State board, char placement, int x, int y, String direction) {
+		if("upRight".equals(direction)) {
+			if(board.markPosition(x-1, y+1, placement)==true) {
+				return true;
+			}
+			else if(board.markPosition(x+2, y-2, placement)==true) {
+				return true;
+			}
+		}
+		else if("right".equals(direction)) {
+			if(board.markPosition(x-1, y, placement)==true) {
+				return true;
+			}
+			else if(board.markPosition(x+2, y, placement)==true) {
+				return true;
+			}
+		}
+		else if("downRight".equals(direction)) {
+			if(board.markPosition(x-1, y-1, placement)==true) {
+				return true;
+			}
+			else if(board.markPosition(x+2, y+2, placement)==true) {
+				return true;
+			}
+		}
+		else if("down".equals(direction)) {
+			if(board.markPosition(x, y-1, placement)==true) {
+				return true;
+			}
+			else if(board.markPosition(x, y+2, placement)==true) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public char[][] getBoard() {
