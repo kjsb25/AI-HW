@@ -9,6 +9,8 @@ public class HW4 {
 		currState.printBoard();
 		char player='X';
 		while(!currState.win){
+			currState = BeginnerDecision(currState, 'O');
+			currState.printBoard();
 			currState=userDecision(currState,player);
 			currState.printBoard();
 		}
@@ -17,9 +19,17 @@ public class HW4 {
 	
 	//may just implement players here, while they are technically objects it just seems easier to implement them as functions....
 	
-	public static State BeginnerDecision(State state){
+	public static State BeginnerDecision(State state,char symbol){
 		State newState=new State(state);
-		
+		if(newState.isTwoInARowOpen(symbol,symbol,newState)) {
+			newState.win = true;
+		}
+		else if(newState.isTwoInARowOpen('X','O',newState)) {
+			return newState;
+		}
+		else
+			//newState.firstOpen('O',newState);
+			return newState;
 		return newState;
 	}
 	

@@ -77,9 +77,9 @@ public class State {
 	 * @param search is the symbol we are looking for
 	 * @param placement is the symbol we will place
 	 * @param board is the board
-	 * @return 0 for no option to block or win, 1 for block, 2 for win
+	 * @return false for no piece placed and true for piece placed
 	 */
-	public static int isTwoInARowOpen(char search, char placement, State board){
+	public boolean isTwoInARowOpen(char search, char placement, State board){
 		//loop through board
 		for(int i=0;i<BoardLength;i++){
 			for(int j=0;j<BoardLength;j++){
@@ -90,40 +90,32 @@ public class State {
 					//if 2 in a row are found we will check if there is a 3rd spot available
 					if(j-1>=0&&i+1<BoardLength&&board.getBoard()[i+1][j-1]==search) {
 						if(checkLocation(board,placement,i,j,"upRight")) {
-							if(search==placement) {
-								return 2;
-							}
-							return 1;
+							return true;
 						}
 					}
 					if(i+1<BoardLength&&board.getBoard()[i+1][j]==search) {
 						if(checkLocation(board,placement,i,j,"right")) {
-							if(search==placement) {
-								return 2;
-							}
-							return 1;
+							return true;
 						}
 					}
 					if(j+1<BoardLength&&i+1<BoardLength&&board.getBoard()[i+1][j+1]==search) {
 						if(checkLocation(board,placement,i,j,"downRight")) {
-							if(search==placement) {
-								return 2;
-							}
-							return 1;
+							return true;
 						}
 					}
 					if(j+1<BoardLength&&i+1<BoardLength&&board.getBoard()[i+1][j+1]==search) {
 						if(checkLocation(board,placement,i,j,"down")) {
-							if(search==placement) {
-								return 2;
-							}
-							return 1;
+							return true;
 						}
 					}
 				}
 			}
 		}
-		return 0;
+		return false;
+	}
+	
+	public boolean firstOpen() {
+		return true;
 	}
 	
 	public static boolean checkLocation(State board, char placement, int x, int y, String direction) {
