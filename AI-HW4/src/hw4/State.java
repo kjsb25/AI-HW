@@ -4,15 +4,24 @@ package hw4;
 public class State {
 	public char[][] board;
 	static final int BoardLength=4;
+	public boolean win=false;
 
 	public State() {
 		super();
 		this.board = buildStartBoard();
 	}
 	
-	public State(char[][] board) {
-		super();
-		this.board = board;
+	
+	public State(State copy) {
+//		super();
+		char[][] newBoard=new char[BoardLength][BoardLength];
+		for(int i=0;i<BoardLength;i++){
+			for(int j=0;j<BoardLength;j++){
+//				System.out.println(i+","+j);
+				newBoard[i][j]=copy.board[i][j];
+			}
+		}
+		this.board=newBoard;
 	}
 	
 	public char[][] buildStartBoard(){
@@ -159,6 +168,16 @@ public class State {
 
 	public void setBoard(char[][] board) {
 		this.board = board;
+	}
+
+
+	public boolean isWin() {
+		return win;
+	}
+
+
+	public void setWin(boolean win) {
+		this.win = win;
 	}
 	
 }

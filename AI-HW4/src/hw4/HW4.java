@@ -5,36 +5,38 @@ import java.util.Scanner;
 public class HW4 {
 
 	public static void main(String[] args) {
-		State startingState=new State();
-		startingState.printBoard();
+		State currState=new State();
+		currState.printBoard();
 		char player='X';
-		userDecision(startingState,player);
-		
-		startingState.printBoard();
+		while(!currState.win){
+			currState=userDecision(currState,player);
+			currState.printBoard();
+		}
+	
 	}
 	
 	//may just implement players here, while they are technically objects it just seems easier to implement them as functions....
 	
 	public static State BeginnerDecision(State state){
-		State newState=new State(state.getBoard());
+		State newState=new State(state);
 		
 		return newState;
 	}
 	
-	public static boolean userDecision(State state,char symbol){
-		//input chekcing
-		if(symbol!='O' && symbol!='X'){
-			return false;
-		}
+	public static State userDecision(State state,char symbol){
+		State newState=new State(state);
+		
 		//create new reader for input, and testing boolean
+		@SuppressWarnings("resource")
 		Scanner reader = new Scanner(System.in);
+		String input_string;
 		boolean input_valid=false;
 		
 		//while a move hasnt been made
 		while(!input_valid){
 			//print prompt and scan input
 			System.out.print("Select x and y coordinates:");
-			String input_string=reader.nextLine();
+			input_string=reader.nextLine();
 			Scanner input=new Scanner(input_string);
 			
 			//check for validity
@@ -43,7 +45,7 @@ public class HW4 {
 				if(input.hasNextInt()){
 					int y=input.nextInt();
 					//attempt to set that position
-					if(state.markPosition(x, y, symbol)){
+					if(newState.markPosition(x, y, symbol)){
 						input_valid=true;
 					}else{
 						System.out.println("Input was outside of board. Try again.");
@@ -56,8 +58,8 @@ public class HW4 {
 			}
 			input.close();
 		}
-		reader.close();
-		return true;
+//		reader.close();
+		return newState;
 	}
 	
 
