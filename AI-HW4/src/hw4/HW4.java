@@ -8,15 +8,33 @@ public class HW4 {
 	public static void main(String[] args) {
 		State currState=new State();
 		currState.printBoard();
-		char player='O';
-//		while(!currState.win){
-			currState=AdvancedDecision(currState, player);
-//			currState = BeginnerDecision(currState, 'O');
-//			currState.printBoard();
-//			currState=userDecision(currState,player);
-//			currState.printBoard();
-//			System.out.print(terminalTest(currState));
-//		}
+		char player='X';
+		int fuckit =0;
+		while(!currState.win){
+			currState = BeginnerDecision(currState, 'O');
+			currState.printBoard();
+			fuckit = currState.countTwoInARow('O', currState);
+			System.out.println(fuckit);
+			if(currState.win==true){
+				System.out.print("Begginer AI wins!\n");
+				break;
+			}
+			currState=userDecision(currState,player);
+			System.out.println(currState.win);
+			currState.printBoard();
+			fuckit = currState.countTwoInARow('X', currState);
+			System.out.println(fuckit);
+			if(terminalTest(currState)==('X')){
+				System.out.print("You win!\n");
+				break;
+			}
+			if(terminalTest(currState)==('D'))
+				break;
+			System.out.print(terminalTest(currState));
+		}
+		
+		System.out.print("GAME OVER\n");
+
 	
 	}
 	
@@ -25,14 +43,17 @@ public class HW4 {
 	public static State BeginnerDecision(State state,char symbol){
 		State newState=new State(state);
 		if(newState.isTwoInARowOpen(symbol,symbol,newState)) {
-			newState.win = true;
+			System.out.println("Made it\n\n\n");
+			newState.setWin(true);
+			return newState;
 		}
 		else if(newState.isTwoInARowOpen('X','O',newState)) {
+			System.out.println("Made it to check nutsack\n\n\n");
 			return newState;
 		}
-		else
-			//newState.firstOpen('O',newState);
-			return newState;
+		else {
+			newState.firstOpen(symbol,newState);
+		}
 		return newState;
 	}
 	
