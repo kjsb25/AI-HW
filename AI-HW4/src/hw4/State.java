@@ -18,7 +18,6 @@ public class State {
 		char[][] newBoard=new char[BoardLength][BoardLength];
 		for(int i=0;i<BoardLength;i++){
 			for(int j=0;j<BoardLength;j++){
-//				System.out.println(i+","+j);
 				newBoard[i][j]=copy.board[i][j];
 			}
 		}
@@ -74,9 +73,6 @@ public class State {
 			return false;
 		}
 		board[x][y]=symbol;
-//		calcHeuristic(symbol);
-//		this.printBoard();
-//		System.out.println(heuristic);
 		return true;
 	}
 	

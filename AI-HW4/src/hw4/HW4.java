@@ -9,7 +9,6 @@ public class HW4 {
 		State currState=new State();
 		currState.printBoard();
 		char player='X';
-		int fuckit =0;
 //		while(!currState.win){
 //			currState = BeginnerDecision(currState, 'O');
 //			currState.printBoard();
@@ -22,19 +21,51 @@ public class HW4 {
 //			currState=userDecision(currState,player);
 //			currState.printBoard();
 //		}
+		currState=new State();
 		while(!currState.win){
 			currState = BeginnerDecision(currState, 'O');
 			currState.printBoard();
-			if(currState.win==true){
+			if(currState.checkforWin('0')){
 				System.out.print("Beginner wins!\n");
 				break;
 			}
 			currState=AdvancedDecision(currState,'X');
-			if(currState.win==true){
+			currState.printBoard();
+			if(currState.checkforWin('X')){
 				System.out.print("Advanced wins!\n");
 				break;
 			}
+		}
+		currState=new State();
+		while(!currState.win){
+			currState = AdvancedDecision(currState, 'O');
 			currState.printBoard();
+			if(currState.checkforWin('O')){
+				System.out.print("Advanced wins!\n");
+				break;
+			}
+			currState=MasterDecision(currState,'X');
+			currState.printBoard();
+			if(currState.checkforWin('X')){
+				System.out.print("Master wins!\n");
+				break;
+			}
+		}
+		
+		currState=new State();
+		while(!currState.win){
+			currState = MasterDecision(currState, 'O');
+			currState.printBoard();
+			if(currState.checkforWin('O')){
+				System.out.print("Master wins!\n");
+				break;
+			}
+			currState=AdvancedDecision(currState,'X');
+			currState.printBoard();
+			if(currState.checkforWin('X')){
+				System.out.print("Advanced wins!\n");
+				break;
+			}
 		}
 		
 		System.out.print("GAME OVER\n");
@@ -47,12 +78,10 @@ public class HW4 {
 	public static State BeginnerDecision(State state,char symbol){
 		State newState=new State(state);
 		if(newState.isTwoInARowOpen(symbol,symbol,newState)) {
-			System.out.println("Made it\n\n\n");
 			newState.setWin(true);
 			return newState;
 		}
 		else if(newState.isTwoInARowOpen('X','O',newState)) {
-			System.out.println("Made it to check nutsack\n\n\n");
 			return newState;
 		}
 		else {
@@ -62,7 +91,6 @@ public class HW4 {
 	}
 	
 	public static State AdvancedDecision(State state,char symbol){
-		System.out.println("herhe");
 		State newState=new State(state);
 		char oppSymbol=' ';
 		if(symbol=='X'){
@@ -71,10 +99,8 @@ public class HW4 {
 			oppSymbol='X';
 		}
 		if(state.isTwoInARowOpen(symbol, symbol, newState)){
-			System.out.println("tried to win");
 			return newState;
 		}else if(newState.isTwoInARowOpen(oppSymbol,symbol,newState)) {
-			System.out.println("tried to block");
 			return newState;
 		}
 		newState=MiniMaxDecision(newState,symbol,2);
@@ -83,7 +109,6 @@ public class HW4 {
 	}
 	
 	public static State MasterDecision(State state,char symbol){
-		System.out.println("herhe");
 		State newState=new State(state);
 		char oppSymbol=' ';
 		if(symbol=='X'){
@@ -92,10 +117,8 @@ public class HW4 {
 			oppSymbol='X';
 		}
 		if(state.isTwoInARowOpen(symbol, symbol, newState)){
-			System.out.println("tried to win");
 			return newState;
 		}else if(newState.isTwoInARowOpen(oppSymbol,symbol,newState)) {
-			System.out.println("tried to block");
 			return newState;
 		}
 		newState=MiniMaxDecision(newState,symbol,4);
@@ -116,21 +139,17 @@ public class HW4 {
 		int hold;
 		for(State child: children){
 			hold=minValue(child,ply-1,symbol,oppSymbol);
-			System.out.println(hold);
 			if(hold>max){
 				max=hold;
 				newState=child;
 			}
 		}
-		System.out.println(max);
 		return newState;
 	}
 	
 	public static int minValue(State state,int depth,char symbol,char oppSymbol){
 		if(terminalTest(state) || depth==0){
 			state.calcHeuristic(symbol);
-//			state.printBoard();
-//			System.out.println(state.heuristic);
 			return state.heuristic;
 		}
 		
@@ -145,8 +164,6 @@ public class HW4 {
 	public static int maxValue(State state,int depth,char symbol,char oppSymbol){
 		if(terminalTest(state) || depth==0){
 			state.calcHeuristic(symbol);
-//			state.printBoard();
-//			System.out.println(state.heuristic);
 			return state.heuristic;
 		}
 		int v=Integer.MIN_VALUE;
