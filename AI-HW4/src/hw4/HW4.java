@@ -7,12 +7,13 @@ public class HW4 {
 	public static void main(String[] args) {
 		State currState=new State();
 		currState.printBoard();
-		char player='X';
+		char player='O';
 		while(!currState.win){
-			currState = BeginnerDecision(currState, 'O');
-			currState.printBoard();
+//			currState = BeginnerDecision(currState, 'O');
+//			currState.printBoard();
 			currState=userDecision(currState,player);
 			currState.printBoard();
+			System.out.print(terminalTest(currState));
 		}
 	
 	}
@@ -33,6 +34,37 @@ public class HW4 {
 		return newState;
 	}
 	
+	public static State AdvancedDecision(State state,char symbol){
+		State newState=new State(state);
+		if(state.isTwoInARowOpen(symbol, symbol, newState)){
+			return newState;
+		}
+		MiniMaxDecision(newState,2);
+		
+		return newState;
+	}
+	
+	public static void MiniMaxDecision(State state, int ply){
+		
+		
+	}
+	
+	/**
+	 * Checks if any players won
+	 * 
+	 * @param state
+	 * @return symbol of winning player, F if no one is winning
+	 */
+	public static char terminalTest(State state){
+		if(state.checkforWin('X')){
+			return 'X';
+		}else if(state.checkforWin('O')){
+			return 'O';
+		}else{
+			return 'F';
+		}
+	}
+	
 	public static State userDecision(State state,char symbol){
 		State newState=new State(state);
 		
@@ -42,7 +74,7 @@ public class HW4 {
 		String input_string;
 		boolean input_valid=false;
 		
-		//while a move hasnt been made
+		//while a move hasn't been made
 		while(!input_valid){
 			//print prompt and scan input
 			System.out.print("Select x and y coordinates:");
@@ -68,7 +100,6 @@ public class HW4 {
 			}
 			input.close();
 		}
-//		reader.close();
 		return newState;
 	}
 	
