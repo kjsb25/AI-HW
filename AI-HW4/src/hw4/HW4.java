@@ -10,9 +10,15 @@ public class HW4 {
 		char player='X';
 		while(!currState.win){
 			currState = BeginnerDecision(currState, 'O');
+			System.out.println(currState.win);
 			currState.printBoard();
+			if(currState.win==true)
+				break;
 			currState=userDecision(currState,player);
+			System.out.println(currState.win);
 			currState.printBoard();
+			if(currState.win==true)
+				System.out.println("\n\nConfusion\n\n");
 		}
 	
 	}
@@ -22,14 +28,17 @@ public class HW4 {
 	public static State BeginnerDecision(State state,char symbol){
 		State newState=new State(state);
 		if(newState.isTwoInARowOpen(symbol,symbol,newState)) {
-			newState.win = true;
+			System.out.println("Made it\n\n\n");
+			newState.setWin(true);
+			return newState;
 		}
 		else if(newState.isTwoInARowOpen('X','O',newState)) {
+			System.out.println("Made it to check nutsack\n\n\n");
 			return newState;
 		}
-		else
-			//newState.firstOpen('O',newState);
-			return newState;
+		else {
+			newState.firstOpen(symbol,newState);
+		}
 		return newState;
 	}
 	

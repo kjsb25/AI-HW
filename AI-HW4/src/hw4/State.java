@@ -88,23 +88,23 @@ public class State {
 					//check to see if symbol has a match in any possible direction
 					//(downleft,left,upleft, and up are not possible because of how we are searching)
 					//if 2 in a row are found we will check if there is a 3rd spot available
-					if(j-1>=0&&i+1<BoardLength&&board.getBoard()[i+1][j-1]==search) {
-						if(checkLocation(board,placement,i,j,"upRight")) {
+					if(j+1<BoardLength&&i-1>=0&&board.getBoard()[i-1][j+1]==search) {
+						if(checkLocation(board,placement,i+1,j+1,"upRight")) {
+							return true;
+						}
+					}
+					if(j+1<BoardLength&&board.getBoard()[i][j+1]==search) {
+						if(checkLocation(board,placement,i+1,j+1,"right")) {
+							return true;
+						}
+					}
+					if(j+1<BoardLength&&i+1<BoardLength&&board.getBoard()[i+1][j+1]==search) {
+						if(checkLocation(board,placement,i+1,j+1,"downRight")) {
 							return true;
 						}
 					}
 					if(i+1<BoardLength&&board.getBoard()[i+1][j]==search) {
-						if(checkLocation(board,placement,i,j,"right")) {
-							return true;
-						}
-					}
-					if(j+1<BoardLength&&i+1<BoardLength&&board.getBoard()[i+1][j+1]==search) {
-						if(checkLocation(board,placement,i,j,"downRight")) {
-							return true;
-						}
-					}
-					if(j+1<BoardLength&&i+1<BoardLength&&board.getBoard()[i+1][j+1]==search) {
-						if(checkLocation(board,placement,i,j,"down")) {
+						if(checkLocation(board,placement,i+1,j+1,"down")) {
 							return true;
 						}
 					}
@@ -114,40 +114,62 @@ public class State {
 		return false;
 	}
 	
-	public boolean firstOpen() {
-		return true;
+	public boolean firstOpen(char symbol, State state) {
+		for(int j=0;j<BoardLength;j++){
+			for(int i=0;i<BoardLength;i++){
+				if(state.valueAtPos(i+1,j+1)==' ') {
+					state.markPosition(i+1,j+1,symbol);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public static boolean checkLocation(State board, char placement, int x, int y, String direction) {
+		System.out.println("Made it to check location\n");
+		System.out.println(direction);
 		if("upRight".equals(direction)) {
-			if(board.markPosition(x-1, y+1, placement)==true) {
+			System.out.println("Made it to upright\n");
+			if(board.markPosition(x+1, y-1, placement)==true) {
+				System.out.println("check1\n");
 				return true;
 			}
-			else if(board.markPosition(x+2, y-2, placement)==true) {
+			else if(board.markPosition(x-2, y+2, placement)==true) {
+				System.out.println("check2\n");
 				return true;
 			}
 		}
 		else if("right".equals(direction)) {
-			if(board.markPosition(x-1, y, placement)==true) {
+			System.out.println("Made it to right\n");
+			if(board.markPosition(x, y-1, placement)==true) {
+				System.out.println("check1\n");
 				return true;
 			}
-			else if(board.markPosition(x+2, y, placement)==true) {
+			else if(board.markPosition(x, y+2, placement)==true) {
+				System.out.println("check2\n");
 				return true;
 			}
 		}
 		else if("downRight".equals(direction)) {
+			System.out.println("Made it to down right\n");
 			if(board.markPosition(x-1, y-1, placement)==true) {
+				System.out.println("check1\n");
 				return true;
 			}
 			else if(board.markPosition(x+2, y+2, placement)==true) {
+				System.out.println("check2\n");
 				return true;
 			}
 		}
 		else if("down".equals(direction)) {
-			if(board.markPosition(x, y-1, placement)==true) {
+			System.out.println("Made it to down\n");
+			if(board.markPosition(x-1, y, placement)==true) {
+				System.out.println("check1\n");
 				return true;
 			}
-			else if(board.markPosition(x, y+2, placement)==true) {
+			else if(board.markPosition(x+2, y, placement)==true) {
+				System.out.println("check2\n");
 				return true;
 			}
 		}
