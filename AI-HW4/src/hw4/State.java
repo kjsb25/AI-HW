@@ -140,7 +140,7 @@ public class State {
 					result=false;
 				}
 			}else{
-				result=true;
+				result=false;
 			}
 		}
 		if(result){
