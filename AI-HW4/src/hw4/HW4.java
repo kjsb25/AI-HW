@@ -127,17 +127,20 @@ public class HW4 {
 	
 	}
 	
-	//may just implement players here, while they are technically objects it just seems easier to implement them as functions....
-	
 	public static State BeginnerDecision(State state,char symbol){
+		//create new state to pass
 		State newState=new State(state);
+		//check if a winning move is possible, and make it if so.
 		if(newState.isTwoInARowOpen(symbol,symbol,newState)) {
+			//set flag to catch
 			newState.setWin(true);
 			return newState;
 		}
+		//check if blocking is needed, and if so block
 		else if(newState.isTwoInARowOpen('X','O',newState)) {
 			return newState;
 		}
+		//place in first open position
 		else {
 			newState.firstOpen(symbol,newState);
 		}

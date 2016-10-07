@@ -12,7 +12,10 @@ public class State {
 		this.board = buildStartBoard();
 	}
 	
-	
+	/**
+	 * Build a state from a previous state
+	 * @param copy
+	 */
 	public State(State copy) {
 //		super();
 		char[][] newBoard=new char[BoardLength][BoardLength];
@@ -24,6 +27,10 @@ public class State {
 		this.board=newBoard;
 	}
 	
+	/**
+	 * builds an empty board
+	 * @return
+	 */
 	public char[][] buildStartBoard(){
 		char[][] board=new char[BoardLength][BoardLength];
 		for(int i=0;i<BoardLength;i++){
@@ -34,6 +41,9 @@ public class State {
 		return board;
 	}
 	
+	/**
+	 * Prints out the board
+	 */
 	public void printBoard(){
 		System.out.print("Board:");
 		for(int i=0;i<BoardLength;i++){
@@ -60,13 +70,22 @@ public class State {
 		return board[x][y];
 	}
 
+	/**
+	 * Set the passed position to the passed symbol
+	 * @param x
+	 * @param y
+	 * @param symbol
+	 * @return
+	 */
 	public boolean markPosition(int x, int y,char symbol){
+		//error checking
 		if(x>BoardLength || x<=0 || y>BoardLength || y<=0){
 			return false;
 		}
 		if(symbol!='X' && symbol!='O'){
 			return false;
 		}
+		//decrememnt to match array indexes
 		x--;
 		y--;
 		if(' '!=board[x][y]){
@@ -118,6 +137,12 @@ public class State {
 		return false;
 	}
 	
+	/**
+	 * Places the symbol in the first avaliable position
+	 * @param symbol
+	 * @param state
+	 * @return
+	 */
 	public boolean firstOpen(char symbol, State state) {
 		for(int j=0;j<BoardLength;j++){
 			for(int i=0;i<BoardLength;i++){
@@ -130,6 +155,11 @@ public class State {
 		return false;
 	}
 	
+	/**
+	 * Checks if the passed symbol has 3 in a row on the board
+	 * @param symbol
+	 * @return
+	 */
 	public boolean checkforWin(char symbol){
 		for(int i=0;i<BoardLength;i++){
 			for(int j=0;j<BoardLength;j++){
@@ -143,6 +173,13 @@ public class State {
 		return false;
 	}
 	
+	/**
+	 * worker for check if win. Checks if symbols neighboring a location have same values.
+	 * @param x
+	 * @param y
+	 * @param symbol
+	 * @return
+	 */
 	public boolean checkNeighbors(int x, int y,char symbol){
 		boolean result=true;
 		//checks vertical row
@@ -200,6 +237,7 @@ public class State {
 		return result;
 	}
 	
+
 	public static boolean checkLocation(State board, char placement, int x, int y, String direction) {
 		if("upRight".equals(direction)) {
 			if(board.markPosition(x+1, y-1, placement)==true) {
@@ -236,6 +274,10 @@ public class State {
 		return false;
 	}
 	
+	/**
+	 * Checks if the board is full
+	 * @return
+	 */
 	public boolean isBoardFull(){
 		for(int i=0;i<BoardLength;i++){
 			for(int j=0;j<BoardLength;j++){
@@ -298,7 +340,10 @@ public class State {
 		return heuristic;
 	}
 
-
+	/**
+	 * calculates the hueristic for current state based on assigned equation
+	 * @param symbol
+	 */
 	public void calcHeuristic(char symbol) {
 		char oppSymbol=' ';
 		if(symbol=='X'){
