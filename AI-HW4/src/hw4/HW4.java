@@ -4,32 +4,44 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class HW4 {
+	
+	static int expanded=0;
 
 	public static void main(String[] args) {
 		State currState=new State();
 		currState.printBoard();
 		char player='X';
-//		while(!currState.win){
-//			currState = BeginnerDecision(currState, 'O');
-//			currState.printBoard();
-//			fuckit = currState.countTwoInARow('O', currState);
-//			System.out.println(fuckit);
-//			if(currState.win==true){
-//				System.out.print("Begginer AI wins!\n");
-//				break;
-//			}
-//			currState=userDecision(currState,player);
-//			currState.printBoard();
-//		}
-		currState=new State();
 		while(!currState.win){
+			System.out.println("Beginner Turn:");
 			currState = BeginnerDecision(currState, 'O');
 			currState.printBoard();
-			if(currState.checkforWin('0')){
+			if(currState.checkforWin('O')){
 				System.out.print("Beginner wins!\n");
 				break;
 			}
+			System.out.println("User Turn:");
+			currState=userDecision(currState,player);
+			currState.printBoard();
+			if(currState.checkforWin('X')){
+				System.out.print("User wins!\n");
+				break;
+			}
+		}
+		currState=new State();
+		while(!currState.win){
+			System.out.println("Beginner Turn:");
+			currState = BeginnerDecision(currState, 'O');
+			currState.printBoard();
+			if(currState.checkforWin('O')){
+				System.out.print("Beginner wins!\n");
+				break;
+			}
+			expanded=0;
+			System.out.println("Advanced Turn:");
+			long startTime = System.nanoTime();
 			currState=AdvancedDecision(currState,'X');
+			long endTime = System.nanoTime();
+			System.out.println("Expanded:"+expanded+"\nTime:"+(endTime - startTime)/1000+" us");
 			currState.printBoard();
 			if(currState.checkforWin('X')){
 				System.out.print("Advanced wins!\n");
@@ -38,13 +50,45 @@ public class HW4 {
 		}
 		currState=new State();
 		while(!currState.win){
-			currState = AdvancedDecision(currState, 'O');
+			System.out.println("Advanced Turn:");
+			currState =AdvancedDecision(currState, 'O');
 			currState.printBoard();
 			if(currState.checkforWin('O')){
 				System.out.print("Advanced wins!\n");
 				break;
 			}
+			expanded=0;
+			System.out.println("Beginner Turn:");
+			long startTime = System.nanoTime();
+			currState=BeginnerDecision(currState,'X');
+			long endTime = System.nanoTime();
+			System.out.println("Expanded:"+expanded+"\nTime:"+(endTime - startTime)/1000+" us");
+			currState.printBoard();
+			if(currState.checkforWin('X')){
+				System.out.print("Beginner wins!\n");
+				break;
+			}
+		}
+		
+		currState=new State();
+		while(!currState.win){
+			expanded=0;
+			System.out.println("Advanced Turn:");
+			long startTime = System.nanoTime();
+			currState = AdvancedDecision(currState, 'O');
+			long endTime = System.nanoTime();
+			System.out.println("Expanded:"+expanded+"\nTime:"+(endTime - startTime)/1000+" us");
+			currState.printBoard();
+			if(currState.checkforWin('O')){
+				System.out.print("Advanced wins!\n");
+				break;
+			}
+			expanded=0;
+			System.out.println("Master Turn:");
+			startTime = System.nanoTime();
 			currState=MasterDecision(currState,'X');
+			endTime = System.nanoTime();
+			System.out.println("Expanded:"+expanded+"\nTime:"+(endTime - startTime)/1000+" us");
 			currState.printBoard();
 			if(currState.checkforWin('X')){
 				System.out.print("Master wins!\n");
@@ -54,13 +98,23 @@ public class HW4 {
 		
 		currState=new State();
 		while(!currState.win){
+			expanded=0;
+			System.out.println("Master Turn:");
+			long startTime = System.nanoTime();
 			currState = MasterDecision(currState, 'O');
+			long endTime = System.nanoTime();
+			System.out.println("Expanded:"+expanded+"\nTime:"+(endTime - startTime)/1000+" us");
 			currState.printBoard();
 			if(currState.checkforWin('O')){
 				System.out.print("Master wins!\n");
 				break;
 			}
+			expanded=0;
+			System.out.println("Advanced Turn:");
+			startTime = System.nanoTime();
 			currState=AdvancedDecision(currState,'X');
+			endTime = System.nanoTime();
+			System.out.println("Expanded:"+expanded+"\nTime:"+(endTime - startTime)/1000+" us");
 			currState.printBoard();
 			if(currState.checkforWin('X')){
 				System.out.print("Advanced wins!\n");
@@ -156,6 +210,7 @@ public class HW4 {
 		int min=Integer.MAX_VALUE;
 		ArrayList<State> children=getChildrenStates(state,oppSymbol);
 		for(State child: children){
+			expanded++;
 			min=Integer.min(min, maxValue(child,depth-1,symbol,oppSymbol));
 		}
 		return min;
@@ -169,6 +224,7 @@ public class HW4 {
 		int v=Integer.MIN_VALUE;
 		ArrayList<State> children=getChildrenStates(state,symbol);
 		for(State child: children){
+			expanded++;
 			v=Integer.max(v, minValue(child,depth-1,symbol,oppSymbol));
 		}
 		return v;
