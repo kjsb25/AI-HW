@@ -200,8 +200,19 @@ public class State {
 		return result;
 	}
 	
+	/**
+	 * Will check to see if either side of a two in a row combination is open, and will place 'placement' in that location
+	 * @param board
+	 * @param placement
+	 * @param x
+	 * @param y
+	 * @param direction
+	 * @return true if piece placed, false if not
+	 */
 	public static boolean checkLocation(State board, char placement, int x, int y, String direction) {
+		//this tell us that to the upright location of x,y there is a piece of the same type
 		if("upRight".equals(direction)) {
+			//checks both sides of the 2 in a row and attempts to place the piece of the same type there if it is open
 			if(board.markPosition(x+1, y-1, placement)==true) {
 				return true;
 			}
@@ -209,6 +220,7 @@ public class State {
 				return true;
 			}
 		}
+		//repeats but for different directions
 		else if("right".equals(direction)) {
 			if(board.markPosition(x, y-1, placement)==true) {
 				return true;
@@ -233,6 +245,7 @@ public class State {
 				return true;
 			}
 		}
+		//no piece placed 
 		return false;
 	}
 	
