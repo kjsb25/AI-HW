@@ -90,7 +90,7 @@ public class State {
 		}
 		x--;
 		y--;
-		return board[x][y];
+		return array[y][x];
 	}
 
 	/**
@@ -105,9 +105,6 @@ public class State {
 		if(x>BoardLength || x<=0 || y>BoardLength || y<=0){
 			return false;
 		}
-		if(!Character.isDigit(symbol)){
-			return false;
-		}
 		//TODO if there are errors, look here
 		if(array==this.board){
 			markPosition(valid,x,y,symbol);
@@ -115,6 +112,10 @@ public class State {
 		//decrement to match array indexes
 		x--;
 		y--;
+		if(Character.isDigit(array[y][x])&&Character.isDigit(symbol)) {
+			array[y][x]=symbol;
+			return true;
+		}
 		if(' '!=array[y][x]){
 			return false;
 		}
@@ -122,13 +123,19 @@ public class State {
 		return true;
 	}
 	
+	/**
+	 * Will update the valid board based on the move made. Sets appropriate tiles to invalid(O)
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @return false if board becomes invalid
+	 */
 	public boolean updateValid(int x, int y) {
 		int tempX;
 		int tempY;
-		for(tempX=0;tempX<BoardLength;tempX++) {
+		for(tempX=1;tempX<=BoardLength;tempX++) {
 			markPosition(valid,tempX,y,'O');
 		}
-		for(tempY=0;tempY<BoardLength;tempY++) {
+		for(tempY=1;tempY<=BoardLength;tempY++) {
 			markPosition(valid,x,tempY,'O');
 		}
 		for(int messy=1;messy<=BoardLength;messy++) {
@@ -148,11 +155,20 @@ public class State {
 		return checkValid();
 	}
 	
+	/**
+	 * Will check if passed location is numerical and will decrement it. 
+	 * If it is decremented to a zero, all surrounding tiles will be set to invalid(O)
+	 * @param x coordinate
+	 * @param y coordinate
+	 */
 	public void checkForNewZero(int x,int y) {
-		if(Character.isDigit(valueAtPos(valid,x,y))) {
-			int j = valueAtPos(valid,x,y);
-			markPosition(valid,x,y, Character.forDigit(j-1, 10));
-			if(j-1==0) {
+		char temp = valueAtPos(valid,x,y);
+		if(temp=='1'||temp=='2') {
+			int j = Character.getNumericValue(temp)-1;
+			char placement = (char)(j+48);
+			markPosition(valid,x,y, placement);
+			if(j==0) {
+				System.out.println("TEST\n\n");
 				markPosition(valid,x-1,y-1,'O');
 				markPosition(valid,x,y-1,'O');
 				markPosition(valid,x+1,y-1,'O');
@@ -165,6 +181,10 @@ public class State {
 		}
 	}
 	
+	/**
+	 * Will check to see if the current board is invalid
+	 * @return false if invalid
+	 */
 	public boolean checkValid() {
 		boolean checkRow = false;
 		boolean checkColumn = false;
@@ -173,16 +193,40 @@ public class State {
 			checkColumn = false;
 			for(int j=0;j<BoardLength;j++) {
 				char temp = valueAtPos(valid,i,j);
-				if(temp=='X'||temp==' ')
+				if(temp=='X'||temp==' ') {
+					System.out.println("TEST");
 					checkRow=true;
+				}
 				char temp2 = valueAtPos(valid,j,i);
-				if(temp2=='X'||temp2==' ')
+				if(temp2=='X'||temp2==' '){
+					System.out.println("TEST");
 					checkColumn=true;
+				}
 			}
 			if(checkRow==false||checkColumn==false)
 				return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * will scan the original board for 0's and set the tiles around them to invalid (O)
+	 */
+	public void initializeValid() {
+		for(int x=1;x<=BoardLength;x++) {
+			for(int y=1;y<=BoardLength;y++) {
+				if(valueAtPos(valid,x,y)=='0') {
+					markPosition(valid,x-1,y-1,'O');
+					markPosition(valid,x,y-1,'O');
+					markPosition(valid,x+1,y-1,'O');
+					markPosition(valid,x-1,y,'O');
+					markPosition(valid,x+1,y,'O');
+					markPosition(valid,x-1,y+1,'O');
+					markPosition(valid,x,y+1,'O');
+					markPosition(valid,x+1,y+1,'O');
+				}
+			}
+		}
 	}
 
 	public char[][] getBoard() {
