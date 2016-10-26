@@ -23,31 +23,14 @@ public class HW6 {
 		prob1.markPosition(prob1.getBoard(), 1, 5, '0');
 		prob1.markPosition(prob1.getBoard(), 3, 4, '1');
 		prob1.initializeValid();
-		prob1.printValidBoard();
-		ArrayList<Position> prob1positions =getAllMoves(prob1);
-		for(Position curr: prob1positions){
-			curr.calcDegreeH(prob1);
-//			curr.print();
-		}
-//		System.out.println(prob1positions.size());
-		
+		prob1.printValidBoard();		
 		
 		State prob2=new State(6);
 		prob2.markPosition(prob2.getBoard(), 2, 6, '0');
 		prob2.markPosition(prob2.getBoard(), 4, 5, '2');
 		prob2.initializeValid();
 		prob1.printValidBoard();
-		ArrayList<Position> prob2positions =getAllMoves(prob2);
-		for(Position curr: prob2positions){
-			curr.calcDegreeH(prob2);
-//			curr.print();
-		}
-		prob2positions.sort(Position.degreeHSort);
-		for(Position curr: prob2positions){
-			curr.print();
-		}
-		System.out.println(prob2positions.size());
-		
+				
 		State prob3=new State(6);
 		prob3.markPosition(prob3.getBoard(), 1, 6, '1');
 		prob3.markPosition(prob3.getBoard(), 4, 3, '1');
@@ -137,8 +120,7 @@ public class HW6 {
 			}
 			
 		}
-		//TODO Uncomment me!
-//		moves.sort(Position.mrvSort);
+		moves.sort(Position.mrvSort);
 		return moves;
 	}
 
@@ -158,8 +140,17 @@ public class HW6 {
 				degrees.add(children.get(children.size()-1));
 				children.remove(children.size()-1);
 			}
+
+			for(Position child: degrees) {
+				child.calcDegreeH(newState);
+			}
+			
 			if(degrees.size()!=1) {
 				degrees.sort(Position.degreeHSort);
+			}
+			for(Position child: degrees) {
+				System.out.println("Testing");
+				child.print();
 			}
 			for(Position child: degrees) {
 				if(newState.markPosition(newState.getBoard(), child.getX(), child.getY(), 'X')==true){

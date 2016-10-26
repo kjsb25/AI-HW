@@ -150,7 +150,7 @@ public class Position implements Comparable<Position> {
 			int degree1=s1.getDegreeH();
 			int degree2=s2.getDegreeH();
 			
-			return degree1-degree2;
+			return degree2-degree1;
 		}
 	};
 	
