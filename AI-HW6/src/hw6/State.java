@@ -1,10 +1,11 @@
 package hw6;
 
 
-public class State {
-	public char[][] board;
-	public char[][] valid;
-	public int BoardLength;
+public class State{
+	private char[][] board;
+	private char[][] valid;
+	private int BoardLength;
+	
 
 
 	public State(int boardlength) {
@@ -130,5 +131,22 @@ public class State {
 		this.board = board;
 	}
 
+	public char[][] getValid() {
+		return valid;
+	}
+
+	public void setValid(char[][] valid) {
+		this.valid = valid;
+	}
+
+	public int getBoardLength() {
+		return BoardLength;
+	}
+
+	public void setBoardLength(int boardLength) {
+		BoardLength = boardLength;
+	}
+	
+	
 	
 }
