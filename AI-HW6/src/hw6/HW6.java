@@ -59,6 +59,10 @@ public class HW6 {
 		if(prob2.updateValid(3, 4)==false)
 			System.out.println("Board invalid!");
 		prob2.printValidBoard();
+		prob2.markPosition(prob2.valid, 2, 2, 'X');
+		if(prob2.updateValid(2, 2)==false)
+			System.out.println("Board invalid!");
+		prob2.printValidBoard();
 	}
 
 }
