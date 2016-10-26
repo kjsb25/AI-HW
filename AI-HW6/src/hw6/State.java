@@ -34,7 +34,7 @@ public class State{
 				newValidBoard[i][j]=copy.board[i][j];
 			}
 		}
-		this.valid=newBoard;
+		this.valid=newValidBoard;
 	}
 	
 	/**
@@ -121,6 +121,9 @@ public class State{
 			return false;
 		}
 		array[y][x]=symbol;
+		if(symbol=='X'){
+			updateValid(x+1,y+1);
+		}
 		return true;
 	}
 	

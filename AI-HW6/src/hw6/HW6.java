@@ -11,21 +11,29 @@ public class HW6 {
 		example.markPosition(example.getBoard(), 2, 5, '1');
 		example.markPosition(example.getBoard(), 4, 1, '2');
 //		State example_sol=backtracking(example);
-		ArrayList<Position> positions =getAllMoves(example);
-		example.printBoard();
-		for(Position curr: positions){
-			curr.print();
-		}
+//		ArrayList<Position> positions =getAllMoves(example);
+//		example.printBoard();
+//		for(Position curr: positions){
+//			curr.print();
+//		}
 		
 		
 		State prob1=new State(5);
 		prob1.markPosition(prob1.getBoard(), 1, 5, '0');
 		prob1.markPosition(prob1.getBoard(), 3, 4, '1');
+		ArrayList<Position> prob1positions =getAllMoves(prob1);
 		prob1.initializeValid();
+		prob1.printValidBoard();
+		for(Position curr: prob1positions){
+			curr.print();
+		}
+		System.out.println(prob1positions.size());
+		
 		
 		State prob2=new State(6);
 		prob2.markPosition(prob2.getBoard(), 2, 6, '0');
 		prob2.markPosition(prob2.getBoard(), 4, 5, '2');
+		prob2.initializeValid();
 		prob2.initializeValid();
 		
 		State prob3=new State(6);
@@ -40,7 +48,7 @@ public class HW6 {
 		prob4.markPosition(prob4.getBoard(), 5, 1, '2');
 		prob4.initializeValid();
 		
-		example.printBoard();
+//		example.printBoard();
 
 //		example.printValidBoard();
 //		prob1.printBoard();
@@ -63,7 +71,7 @@ public class HW6 {
 	public static ArrayList<Position> getAllMoves(State state){
 		ArrayList<Position> moves=new ArrayList<Position>();
 		int length=state.getBoardLength();
-		//check rows
+		//check columns
 		for(int x=1;x<=length;x++){
 			int mrv=0;
 			for(int j=1;j<=length;j++){
@@ -72,10 +80,12 @@ public class HW6 {
 				}
 			}
 			for(int j=1;j<=length;j++){
-				moves.add(new Position(j,x,mrv));
+				if(Character.compare(' ',state.valueAtPos(state.getValid(),x, j))==0){
+					moves.add(new Position(x,j,mrv));
+				}
 			}
 		}
-		//check columns
+		//check rows
 		for(int x=1;x<=length;x++){
 			int mrv=0;
 			for(int j=1;j<=length;j++){
@@ -85,8 +95,7 @@ public class HW6 {
 			}
 			for(int j=1;j<=length;j++){
 				//TODO There might be a problem here, fix if needed
-				if(mrv<moves.get(j).getMrv()){
-					moves.remove(j);
+				if(Character.compare(' ',(state.valueAtPos(state.getValid(),x, j)))==0){
 					moves.add(new Position(x,j,mrv));
 				}
 			}
