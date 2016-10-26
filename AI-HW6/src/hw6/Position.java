@@ -16,6 +16,13 @@ public class Position implements Comparable<Position> {
 		this.y = y;
 		this.mrv=mrv;
 	}
+	
+	public Position(Position copy) {
+		super();
+		this.x = copy.getX();
+		this.y = copy.getY();
+		this.mrv=copy.getMrv();
+	}
 
 	public static Comparator<Position> mrvSort= new Comparator<Position>(){
 		public int compare(Position s1,Position s2){
