@@ -1,6 +1,7 @@
 package hw6;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class HW6 {
 	
@@ -88,26 +89,36 @@ public class HW6 {
 			}
 		}
 		//check rows
-		for(int x=1;x<=length;x++){
+		for(int y=1;y<=length;y++){
 			int mrv=0;
 			for(int j=1;j<=length;j++){
-				if(' '==state.valueAtPos(state.getValid(),j, x)){
+				if(' '==state.valueAtPos(state.getValid(),j, y)){
 					mrv++;
 				}
 			}
 			for(int j=1;j<=length;j++){
 				//TODO There might be a problem here, fix if needed
-				if(' '==state.valueAtPos(state.getValid(),x, j)){
-					for(Position curr: moves){
-						
+				if(' '==state.valueAtPos(state.getValid(),j, y)){
+					Iterator<Position> iter=moves.iterator();
+					boolean done=false;
+					while(iter.hasNext() && done==false){
+						Position curr=iter.next();
+						if(curr.getX()==j && curr.getY()==y){
+							if(curr.getMrv()>mrv){
+								moves.remove(curr);
+								moves.add(new Position(j,y,mrv));
+							}
+							done=true;
+						}
 					}
-					moves.add(new Position(x,j,mrv));
 				}
 			}
 			
 		}
+		moves.sort(Position.mrvSort);
 		return moves;
 	}
+
 	
 
 }
