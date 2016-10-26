@@ -26,18 +26,27 @@ public class HW6 {
 		prob1.printValidBoard();
 		ArrayList<Position> prob1positions =getAllMoves(prob1);
 		for(Position curr: prob1positions){
-//			curr.print();
 			curr.calcDegreeH(prob1);
-			curr.print();
+//			curr.print();
 		}
-		System.out.println(prob1positions.size());
+//		System.out.println(prob1positions.size());
 		
 		
 		State prob2=new State(6);
 		prob2.markPosition(prob2.getBoard(), 2, 6, '0');
 		prob2.markPosition(prob2.getBoard(), 4, 5, '2');
 		prob2.initializeValid();
-		prob2.initializeValid();
+		prob1.printValidBoard();
+		ArrayList<Position> prob2positions =getAllMoves(prob2);
+		for(Position curr: prob2positions){
+			curr.calcDegreeH(prob2);
+//			curr.print();
+		}
+		prob2positions.sort(Position.degreeHSort);
+		for(Position curr: prob2positions){
+			curr.print();
+		}
+		System.out.println(prob2positions.size());
 		
 		State prob3=new State(6);
 		prob3.markPosition(prob3.getBoard(), 1, 6, '1');
