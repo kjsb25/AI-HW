@@ -65,6 +65,20 @@ public class State {
 	}
 	
 	/**
+	 * Prints out the valid board (for error checking)
+	 */
+	public void printValidBoard(){
+		System.out.print("Valid Board:");
+		for(int i=0;i<BoardLength;i++){
+			System.out.print("\n");
+			for(int j=0;j<BoardLength;j++){
+				System.out.print("["+valid[i][j]+"]");
+			}
+		}
+		System.out.println("");
+	}
+	
+	/**
 	 * gets the value at the passed indices, if the indices are invalid, will return a 'F'
 	 * @param x
 	 * @param y
@@ -86,7 +100,7 @@ public class State {
 	 * @param symbol
 	 * @return
 	 */
-	public boolean markPosition(char[][] array,int x, int y, char symbol){
+	public boolean markPosition(char[][] array, int x, int y, char symbol){
 		//error checking
 		if(x>BoardLength || x<=0 || y>BoardLength || y<=0){
 			return false;
@@ -94,13 +108,17 @@ public class State {
 		if(!Character.isDigit(symbol)){
 			return false;
 		}
+		//TODO if there are errors, look here
+		if(array==this.board){
+			markPosition(valid,x,y,symbol);
+		}
 		//decrement to match array indexes
 		x--;
 		y--;
-		if(' '!=array[x][y]){
+		if(' '!=array[y][x]){
 			return false;
 		}
-		array[x][y]=symbol;
+		array[y][x]=symbol;
 		return true;
 	}
 
