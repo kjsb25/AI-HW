@@ -98,6 +98,9 @@ public class HW6 {
 			for(int j=1;j<=length;j++){
 				//TODO There might be a problem here, fix if needed
 				if(' '==state.valueAtPos(state.getValid(),x, j)){
+					for(Position curr: moves){
+						
+					}
 					moves.add(new Position(x,j,mrv));
 				}
 			}
