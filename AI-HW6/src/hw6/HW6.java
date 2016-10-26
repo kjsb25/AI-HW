@@ -50,6 +50,15 @@ public class HW6 {
 		prob4.initializeValid();
 		
 
+		State result = null;
+		result = backtracking(prob1);
+		if(result==null) {
+			System.out.println("No solution found!");
+		}
+		else {
+			prob1.printBoard();
+			prob1.printValidBoard();
+		}
 //		example.printBoard();
 
 //		example.printValidBoard();
@@ -121,11 +130,15 @@ public class HW6 {
 		return moves;
 	}
 
-	
+	/**
+	 * Runs backtracking algorithm on the given state recursively until a solution is found
+	 * @param state
+	 * @return the solution
+	 */
 	public static State backtracking (State state) {
 		ArrayList<Position> children= getAllMoves(state);
 		ArrayList<Position> degrees = new ArrayList<Position> ();
-		State newState = state;
+		State newState = new State(state,state.getBoardLength());
 		while(1==1){
 			degrees.clear();
 			int val = children.get(children.size()-1).getMrv();
@@ -133,12 +146,19 @@ public class HW6 {
 				degrees.add(children.get(children.size()-1));
 				children.remove(children.size()-1);
 			}
-			//TODO: SORT DEGREES
+			if(degrees.size()!=1) {
+				degrees.sort(Position.degreeHSort);
+			}
 			for(Position child: degrees) {
 				if(newState.markPosition(newState.getBoard(), child.getX(), child.getY(), 'X')==true){
-					newState = backtracking(newState);
+					if(newState.isGameWon()) {
+						return newState;
+					}
+					return backtracking(newState);
 				}
-				
+			}
+			if(children.size()==0){
+				return null;
 			}
 		}
 	}

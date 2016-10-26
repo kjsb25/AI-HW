@@ -233,6 +233,21 @@ public class State{
 			}
 		}
 	}
+	
+	public boolean isGameWon() {
+		int count = 0;
+		for(int x=1;x<=BoardLength;x++) {
+			for(int y=1;y<=BoardLength;y++) {
+				if(valueAtPos(valid,x,y)=='X') {
+					count++;
+				}
+			}
+		}
+		if (count==BoardLength) {
+			return true;
+		}
+		return false;
+	}
 
 	public char[][] getBoard() {
 		return board;
