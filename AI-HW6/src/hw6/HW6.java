@@ -21,9 +21,9 @@ public class HW6 {
 		State prob1=new State(5);
 		prob1.markPosition(prob1.getBoard(), 1, 5, '0');
 		prob1.markPosition(prob1.getBoard(), 3, 4, '1');
-		ArrayList<Position> prob1positions =getAllMoves(prob1);
 		prob1.initializeValid();
 		prob1.printValidBoard();
+		ArrayList<Position> prob1positions =getAllMoves(prob1);
 		for(Position curr: prob1positions){
 			curr.print();
 		}
@@ -71,16 +71,18 @@ public class HW6 {
 	public static ArrayList<Position> getAllMoves(State state){
 		ArrayList<Position> moves=new ArrayList<Position>();
 		int length=state.getBoardLength();
+		state.printValidBoard();
 		//check columns
 		for(int x=1;x<=length;x++){
 			int mrv=0;
+			
 			for(int j=1;j<=length;j++){
-				if(Character.compare(' ',state.valueAtPos(state.getValid(),x, j))==0){
+				if(' '==state.valueAtPos(state.getValid(),x, j)){
 					mrv++;
 				}
 			}
 			for(int j=1;j<=length;j++){
-				if(Character.compare(' ',state.valueAtPos(state.getValid(),x, j))==0){
+				if(' '==state.valueAtPos(state.getValid(),x, j)){
 					moves.add(new Position(x,j,mrv));
 				}
 			}
@@ -89,13 +91,13 @@ public class HW6 {
 		for(int x=1;x<=length;x++){
 			int mrv=0;
 			for(int j=1;j<=length;j++){
-				if(Character.compare(' ',(state.valueAtPos(state.getValid(),j, x)))==0){
+				if(' '==state.valueAtPos(state.getValid(),j, x)){
 					mrv++;
 				}
 			}
 			for(int j=1;j<=length;j++){
 				//TODO There might be a problem here, fix if needed
-				if(Character.compare(' ',(state.valueAtPos(state.getValid(),x, j)))==0){
+				if(' '==state.valueAtPos(state.getValid(),x, j)){
 					moves.add(new Position(x,j,mrv));
 				}
 			}
