@@ -27,7 +27,13 @@ public class State {
 				newBoard[i][j]=copy.board[i][j];
 			}
 		}
-		this.board=newBoard;
+		char[][] newValidBoard=new char[BoardLength][BoardLength];
+		for(int i=0;i<BoardLength;i++){
+			for(int j=0;j<BoardLength;j++){
+				newValidBoard[i][j]=copy.board[i][j];
+			}
+		}
+		this.valid=newBoard;
 	}
 	
 	/**
@@ -53,6 +59,20 @@ public class State {
 			System.out.print("\n");
 			for(int j=0;j<BoardLength;j++){
 				System.out.print("["+board[i][j]+"]");
+			}
+		}
+		System.out.println("");
+	}
+	
+	/**
+	 * Prints out the valid board (for error checking)
+	 */
+	public void printValidBoard(){
+		System.out.print("Valid Board:");
+		for(int i=0;i<BoardLength;i++){
+			System.out.print("\n");
+			for(int j=0;j<BoardLength;j++){
+				System.out.print("["+valid[i][j]+"]");
 			}
 		}
 		System.out.println("");
@@ -85,13 +105,20 @@ public class State {
 		if(x>BoardLength || x<=0 || y>BoardLength || y<=0){
 			return false;
 		}
+		if(!Character.isDigit(symbol)){
+			return false;
+		}
+		//TODO if there are errors, look here
+		if(array==this.board){
+			markPosition(valid,x,y,symbol);
+		}
 		//decrement to match array indexes
 		x--;
 		y--;
-		if(' '!=board[x][y]){
+		if(' '!=array[y][x]){
 			return false;
 		}
-		board[x][y]='X';
+		array[y][x]=symbol;
 		return true;
 	}
 	
