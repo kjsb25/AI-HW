@@ -64,7 +64,7 @@ public class State {
 	 * @param y
 	 * @return value at indices
 	 */
-	public char valueAtPos(int x, int y){
+	public char valueAtPos(char[][] array, int x, int y){
 		if(x>BoardLength || x<=0 || y>BoardLength || y<=0){
 			return 'F';
 		}
@@ -80,7 +80,7 @@ public class State {
 	 * @param symbol
 	 * @return
 	 */
-	public boolean markPosition(int x, int y){
+	public boolean markPosition(char[][] array, int x, int y, char symbol){
 		//error checking
 		if(x>BoardLength || x<=0 || y>BoardLength || y<=0){
 			return false;
@@ -92,6 +92,69 @@ public class State {
 			return false;
 		}
 		board[x][y]='X';
+		return true;
+	}
+	
+	public boolean updateValid(int x, int y) {
+		int tempX;
+		int tempY;
+		for(tempX=0;tempX<BoardLength;tempX++) {
+			markPosition(valid,tempX,y,'O');
+		}
+		for(tempY=0;tempY<BoardLength;tempY++) {
+			markPosition(valid,x,tempY,'O');
+		}
+		for(int messy=1;messy<=BoardLength;messy++) {
+			markPosition(valid,x-messy,y-messy,'O');
+			markPosition(valid,x-messy,y+messy,'O');
+			markPosition(valid,x+messy,y-messy,'O');
+			markPosition(valid,x+messy,y+messy,'O');
+		}
+		checkForNewZero(x-1,y-1);
+		checkForNewZero(x,y-1);
+		checkForNewZero(x+1,y-1);
+		checkForNewZero(x-1,y);
+		checkForNewZero(x+1,y);
+		checkForNewZero(x-1,y+1);
+		checkForNewZero(x,y+1);
+		checkForNewZero(x+1,y+1);
+		return checkValid();
+	}
+	
+	public void checkForNewZero(int x,int y) {
+		if(Character.isDigit(valueAtPos(valid,x,y))) {
+			int j = valueAtPos(valid,x,y);
+			markPosition(valid,x,y, Character.forDigit(j-1, 10));
+			if(j-1==0) {
+				markPosition(valid,x-1,y-1,'O');
+				markPosition(valid,x,y-1,'O');
+				markPosition(valid,x+1,y-1,'O');
+				markPosition(valid,x-1,y,'O');
+				markPosition(valid,x+1,y,'O');
+				markPosition(valid,x-1,y+1,'O');
+				markPosition(valid,x,y+1,'O');
+				markPosition(valid,x+1,y+1,'O');
+			}
+		}
+	}
+	
+	public boolean checkValid() {
+		boolean checkRow = false;
+		boolean checkColumn = false;
+		for(int i=0;i<BoardLength;i++) {
+			checkRow = false;
+			checkColumn = false;
+			for(int j=0;j<BoardLength;j++) {
+				char temp = valueAtPos(valid,i,j);
+				if(temp=='X'||temp==' ')
+					checkRow=true;
+				char temp2 = valueAtPos(valid,j,i);
+				if(temp2=='X'||temp2==' ')
+					checkColumn=true;
+			}
+			if(checkRow==false||checkColumn==false)
+				return false;
+		}
 		return true;
 	}
 
