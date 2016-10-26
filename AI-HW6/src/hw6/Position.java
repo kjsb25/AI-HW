@@ -72,31 +72,68 @@ public class Position implements Comparable<Position> {
 		if(temp=='1') {
 //				System.out.println("TEST\n\n");
 			if(' '==state.valueAtPos(state.getValid(),x-1,y-1)){
-				degree++;
+				if(duplicatePostion(x-1,y-1)==false) {
+					degree++;
+				}
 			}
 			if(' '==state.valueAtPos(state.getValid(),x,y-1)){
-				degree++;
+				if(duplicatePostion(x,y-1)==false) {
+					degree++;
+				}
 			}
 			if(' '==state.valueAtPos(state.getValid(),x+1,y-1)){
-				degree++;
+				if(duplicatePostion(x+1,y-1)==false) {
+					degree++;
+				}
 			}
 			if(' '==state.valueAtPos(state.getValid(),x-1,y)){
-				degree++;
+				if(duplicatePostion(x-1,y)==false) {
+					degree++;
+				}
 			}
 			if(' '==state.valueAtPos(state.getValid(),x+1,y)){
-				degree++;
+				if(duplicatePostion(x+1,y)==false) {
+					degree++;
+				}
 			}
 			if(' '==state.valueAtPos(state.getValid(),x-1,y+1)){
-				degree++;
+				if(duplicatePostion(x-1,y+1)==false) {
+					degree++;
+				}
 			}
 			if(' '==state.valueAtPos(state.getValid(),x,y+1)){
-				degree++;
+				if(duplicatePostion(x,y+1)==false) {
+					degree++;
+				}
 			}
 			if(' '==state.valueAtPos(state.getValid(),x+1,y+1)){
-				degree++;
+				if(duplicatePostion(x+1,y+1)==false) {
+					degree++;
+				}
 			}
 		}
 		return degree;
+	}
+	
+	public boolean duplicatePostion(int checkX, int checkY) {
+		if(this.x==checkX || this.y==checkY) {
+			return true;
+		}
+		for(int messy=1;messy<=2;messy++) {
+			if(x-messy==checkX && y-messy==checkY) {
+				return true;
+			}
+			if(x-messy==checkX && y+messy==checkY) {
+				return true;
+			}
+			if(x+messy==checkX && y-messy==checkY) {
+				return true;
+			}
+			if(x+messy==checkX && y+messy==checkY) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static Comparator<Position> mrvSort= new Comparator<Position>(){
