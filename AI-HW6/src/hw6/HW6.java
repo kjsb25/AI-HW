@@ -48,6 +48,7 @@ public class HW6 {
 		prob4.markPosition(prob4.getBoard(), 5, 1, '2');
 		prob4.initializeValid();
 		
+
 //		example.printBoard();
 
 //		example.printValidBoard();
@@ -59,6 +60,7 @@ public class HW6 {
 //		prob3.printValidBoard();
 //		prob4.printBoard();
 //		prob4.printValidBoard();
+
 
 	}
 	

@@ -172,7 +172,6 @@ public class State{
 			char placement = (char)(j+48);
 			markPosition(valid,x,y, placement);
 			if(j==0) {
-				System.out.println("TEST\n\n");
 				markPosition(valid,x-1,y-1,'O');
 				markPosition(valid,x,y-1,'O');
 				markPosition(valid,x+1,y-1,'O');
@@ -196,14 +195,14 @@ public class State{
 			checkRow = false;
 			checkColumn = false;
 			for(int j=0;j<BoardLength;j++) {
-				char temp = valueAtPos(valid,i,j);
+				char temp = valueAtPos(valid,i+1,j+1);
 				if(temp=='X'||temp==' ') {
-					System.out.println("TEST");
+					System.out.println("TEST1");
 					checkRow=true;
 				}
-				char temp2 = valueAtPos(valid,j,i);
+				char temp2 = valueAtPos(valid,j+1,i+1);
 				if(temp2=='X'||temp2==' '){
-					System.out.println("TEST");
+					System.out.println("TEST2");
 					checkColumn=true;
 				}
 			}
