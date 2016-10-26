@@ -27,7 +27,13 @@ public class State {
 				newBoard[i][j]=copy.board[i][j];
 			}
 		}
-		this.board=newBoard;
+		char[][] newValidBoard=new char[BoardLength][BoardLength];
+		for(int i=0;i<BoardLength;i++){
+			for(int j=0;j<BoardLength;j++){
+				newValidBoard[i][j]=copy.board[i][j];
+			}
+		}
+		this.valid=newBoard;
 	}
 	
 	/**
@@ -80,18 +86,21 @@ public class State {
 	 * @param symbol
 	 * @return
 	 */
-	public boolean markPosition(int x, int y){
+	public boolean markPosition(char[][] array,int x, int y, char symbol){
 		//error checking
 		if(x>BoardLength || x<=0 || y>BoardLength || y<=0){
+			return false;
+		}
+		if(!Character.isDigit(symbol)){
 			return false;
 		}
 		//decrement to match array indexes
 		x--;
 		y--;
-		if(' '!=board[x][y]){
+		if(' '!=array[x][y]){
 			return false;
 		}
-		board[x][y]='X';
+		array[x][y]=symbol;
 		return true;
 	}
 
