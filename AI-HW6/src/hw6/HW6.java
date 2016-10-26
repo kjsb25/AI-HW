@@ -122,5 +122,24 @@ public class HW6 {
 	}
 
 	
-
+	public static State backtracking (State state) {
+		ArrayList<Position> children= getAllMoves(state);
+		ArrayList<Position> degrees = new ArrayList<Position> ();
+		State newState = state;
+		while(1==1){
+			degrees.clear();
+			int val = children.get(children.size()-1).getMrv();
+			while(children.get(children.size()-1).getMrv()==val) {
+				degrees.add(children.get(children.size()-1));
+				children.remove(children.size()-1);
+			}
+			//TODO: SORT DEGREES
+			for(Position child: degrees) {
+				if(newState.markPosition(newState.getBoard(), child.getX(), child.getY(), 'X')==true){
+					newState = backtracking(newState);
+				}
+				
+			}
+		}
+	}
 }
