@@ -26,6 +26,8 @@ public class HW6 {
 		prob1.printValidBoard();
 		ArrayList<Position> prob1positions =getAllMoves(prob1);
 		for(Position curr: prob1positions){
+//			curr.print();
+			curr.calcDegreeH(prob1);
 			curr.print();
 		}
 		System.out.println(prob1positions.size());
@@ -115,7 +117,8 @@ public class HW6 {
 			}
 			
 		}
-		moves.sort(Position.mrvSort);
+		//TODO Uncomment me!
+//		moves.sort(Position.mrvSort);
 		return moves;
 	}
 
