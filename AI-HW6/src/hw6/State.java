@@ -107,24 +107,30 @@ public class State{
 		if(x>BoardLength || x<=0 || y>BoardLength || y<=0){
 			return false;
 		}
-		//TODO if there are errors, look here
-		if(array==this.board){
-			boolean test = markPosition(valid,x,y,symbol);
-			this.printValidBoard();
-			this.printBoard();
-			return test;
-		}
+		
 		//decrement to match array indexes
 		x--;
 		y--;
+		
 		if(Character.isDigit(array[y][x])&&Character.isDigit(symbol)) {
 			array[y][x]=symbol;
 			return true;
 		}
+		
 		if(' '!=array[y][x]){
 			return false;
 		}
+		
 		array[y][x]=symbol;
+		
+		//TODO if there are errors, look here
+		if(array==this.board){
+			boolean test = markPosition(valid,x+1,y+1,symbol);
+			this.printValidBoard();
+			this.printBoard();
+			return test;
+		}
+		
 
 		if(symbol=='X' && array==valid){
 			return updateValid(x+1,y+1);
@@ -241,6 +247,9 @@ public class State{
 			for(int y=1;y<=BoardLength;y++) {
 				if(valueAtPos(valid,x,y)=='X') {
 					count++;
+				}
+				if(valueAtPos(valid,x,y)=='1' || valueAtPos(valid,x,y)=='2') {
+					return false;
 				}
 			}
 		}

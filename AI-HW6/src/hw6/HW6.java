@@ -19,25 +19,25 @@ public class HW6 {
 		prob1.markPosition(prob1.getBoard(), 3, 4, '1');
 		prob1.initializeValid();
 		
-//		State prob2=new State(6);
-//		prob2.markPosition(prob2.getBoard(), 2, 6, '0');
-//		prob2.markPosition(prob2.getBoard(), 4, 5, '2');
-//		prob2.initializeValid();
-//				
-//		State prob3=new State(6);
-//		prob3.markPosition(prob3.getBoard(), 1, 6, '1');
-//		prob3.markPosition(prob3.getBoard(), 4, 3, '1');
-//		prob3.markPosition(prob3.getBoard(), 6, 4, '2');
-//		prob3.initializeValid();
-//		
-//		State prob4=new State(7);
-//		prob4.markPosition(prob4.getBoard(), 1, 7, '1');
-//		prob4.markPosition(prob4.getBoard(), 4, 6, '0');
-//		prob4.markPosition(prob4.getBoard(), 5, 1, '2');
-//		prob4.initializeValid();
+		State prob2=new State(6);
+		prob2.markPosition(prob2.getBoard(), 2, 6, '0');
+		prob2.markPosition(prob2.getBoard(), 4, 5, '2');
+		prob2.initializeValid();
+				
+		State prob3=new State(6);
+		prob3.markPosition(prob3.getBoard(), 1, 6, '1');
+		prob3.markPosition(prob3.getBoard(), 4, 3, '1');
+		prob3.markPosition(prob3.getBoard(), 6, 4, '2');
+		prob3.initializeValid();
+		
+		State prob4=new State(7);
+		prob4.markPosition(prob4.getBoard(), 1, 7, '1');
+		prob4.markPosition(prob4.getBoard(), 4, 6, '0');
+		prob4.markPosition(prob4.getBoard(), 5, 1, '2');
+		prob4.initializeValid();
 		
 		State result = null;
-		result = backtracking(example);
+		result = backtracking(prob4);
 		if(result==null) {
 			System.out.println("No solution found!");
 		}
@@ -46,29 +46,6 @@ public class HW6 {
 			result.printBoard();
 			result.printValidBoard();
 		}
-
-//		State result = null;
-//		result = backtracking(prob1);
-//		if(result==null) {
-//			System.out.println("No solution found!");
-//		}
-//		else {
-//			result.printBoard();
-//			result.printValidBoard();
-//		}
-//		example.printBoard();
-
-//		example.printValidBoard();
-//		prob1.printBoard();
-//		prob1.printValidBoard();
-//		prob2.printBoard();
-//		prob2.printValidBoard();
-//		prob3.printBoard();
-//		prob3.printValidBoard();
-//		prob4.printBoard();
-//		prob4.printValidBoard();
-
-
 	}
 	
 	/**
@@ -156,7 +133,9 @@ public class HW6 {
 				child.print();
 			}
 			for(Position child: degrees) {
+				newState.printBoard();
 				newState = new State(state,state.getBoardLength());
+				newState.printBoard();
 				if(newState.markPosition(newState.getBoard(), child.getX(), child.getY(), 'X')==true){
 					if(newState.isGameWon()) {
 						return newState;
