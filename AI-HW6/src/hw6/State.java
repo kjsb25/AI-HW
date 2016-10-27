@@ -31,7 +31,7 @@ public class State{
 		char[][] newValidBoard=new char[BoardLength][BoardLength];
 		for(int i=0;i<BoardLength;i++){
 			for(int j=0;j<BoardLength;j++){
-				newValidBoard[i][j]=copy.board[i][j];
+				newValidBoard[i][j]=copy.valid[i][j];
 			}
 		}
 		this.board=newBoard;
@@ -109,7 +109,10 @@ public class State{
 		}
 		//TODO if there are errors, look here
 		if(array==this.board){
-			markPosition(valid,x,y,symbol);
+			boolean test = markPosition(valid,x,y,symbol);
+			this.printValidBoard();
+			this.printBoard();
+			return test;
 		}
 		//decrement to match array indexes
 		x--;
@@ -123,9 +126,8 @@ public class State{
 		}
 		array[y][x]=symbol;
 
-		if(symbol=='X' && array==this.valid){
+		if(symbol=='X' && array==valid){
 			return updateValid(x+1,y+1);
-
 		}
 		return true;
 	}
