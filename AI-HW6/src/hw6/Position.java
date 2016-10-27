@@ -40,19 +40,17 @@ public class Position implements Comparable<Position> {
 			}
 		}
 		degree--;
-		for(int messy=1;messy<=state.getBoardLength();messy++) {
-			if(' '==state.valueAtPos(state.getValid(),x-messy,y-messy)){
-				degree++;
-			}
-			if(' '==state.valueAtPos(state.getValid(),x-messy,y+messy)){
-				degree++;
-			}
-			if(' '==state.valueAtPos(state.getValid(),x+messy,y-messy)){
-				degree++;
-			}
-			if(' '==state.valueAtPos(state.getValid(),x+messy,y+messy)){
-				degree++;
-			}
+		if(' '==state.valueAtPos(state.getValid(),x-1,y-1)){
+			degree++;
+		}
+		if(' '==state.valueAtPos(state.getValid(),x-1,y+1)){
+			degree++;
+		}
+		if(' '==state.valueAtPos(state.getValid(),x+1,y-1)){
+			degree++;
+		}
+		if(' '==state.valueAtPos(state.getValid(),x+1,y+1)){
+			degree++;
 		}
 		degree+=checkForNewZero(state,x-1,y-1);
 		degree+=checkForNewZero(state,x,y-1);

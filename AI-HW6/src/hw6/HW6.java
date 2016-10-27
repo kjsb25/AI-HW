@@ -37,7 +37,7 @@ public class HW6 {
 		prob4.initializeValid();
 		
 		State result = null;
-		result = backtracking(prob4);
+		result = backtracking(prob3);
 		if(result==null) {
 			System.out.println("No solution found!");
 		}

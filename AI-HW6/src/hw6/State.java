@@ -153,12 +153,12 @@ public class State{
 		for(tempY=1;tempY<=BoardLength;tempY++) {
 			markPosition(valid,x,tempY,'O');
 		}
-		for(int messy=1;messy<=BoardLength;messy++) {
-			markPosition(valid,x-messy,y-messy,'O');
-			markPosition(valid,x-messy,y+messy,'O');
-			markPosition(valid,x+messy,y-messy,'O');
-			markPosition(valid,x+messy,y+messy,'O');
-		}
+		
+		markPosition(valid,x-1,y-1,'O');
+		markPosition(valid,x-1,y+1,'O');
+		markPosition(valid,x+1,y-1,'O');
+		markPosition(valid,x+1,y+1,'O');
+		
 		checkForNewZero(x-1,y-1);
 		checkForNewZero(x,y-1);
 		checkForNewZero(x+1,y-1);
