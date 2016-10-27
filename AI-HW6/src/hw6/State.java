@@ -34,6 +34,7 @@ public class State{
 				newValidBoard[i][j]=copy.board[i][j];
 			}
 		}
+		this.board=newBoard;
 		this.valid=newValidBoard;
 	}
 	
@@ -122,7 +123,7 @@ public class State{
 		}
 		array[y][x]=symbol;
 
-		if(symbol=='X' && array==this.board){
+		if(symbol=='X' && array==this.valid){
 			return updateValid(x+1,y+1);
 
 		}
@@ -199,12 +200,10 @@ public class State{
 			for(int j=0;j<BoardLength;j++) {
 				char temp = valueAtPos(valid,i+1,j+1);
 				if(temp=='X'||temp==' ') {
-					System.out.println("TEST1");
 					checkRow=true;
 				}
 				char temp2 = valueAtPos(valid,j+1,i+1);
 				if(temp2=='X'||temp2==' '){
-					System.out.println("TEST2");
 					checkColumn=true;
 				}
 			}

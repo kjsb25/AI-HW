@@ -11,25 +11,18 @@ public class HW6 {
 		State example=new State(5);
 		example.markPosition(example.getBoard(), 2, 5, '1');
 		example.markPosition(example.getBoard(), 4, 1, '2');
-//		State example_sol=backtracking(example);
-//		ArrayList<Position> positions =getAllMoves(example);
-//		example.printBoard();
-//		for(Position curr: positions){
-//			curr.print();
-//		}
+		example.initializeValid();
 		
 		
 		State prob1=new State(5);
 		prob1.markPosition(prob1.getBoard(), 1, 5, '0');
 		prob1.markPosition(prob1.getBoard(), 3, 4, '1');
 		prob1.initializeValid();
-		prob1.printValidBoard();		
 		
 		State prob2=new State(6);
 		prob2.markPosition(prob2.getBoard(), 2, 6, '0');
 		prob2.markPosition(prob2.getBoard(), 4, 5, '2');
 		prob2.initializeValid();
-		prob1.printValidBoard();
 				
 		State prob3=new State(6);
 		prob3.markPosition(prob3.getBoard(), 1, 6, '1');
@@ -50,8 +43,8 @@ public class HW6 {
 			System.out.println("No solution found!");
 		}
 		else {
-			prob1.printBoard();
-			prob1.printValidBoard();
+			result.printBoard();
+			result.printValidBoard();
 		}
 //		example.printBoard();
 
@@ -133,7 +126,8 @@ public class HW6 {
 		ArrayList<Position> children= getAllMoves(state);
 		ArrayList<Position> degrees = new ArrayList<Position> ();
 		State newState = new State(state,state.getBoardLength());
-		while(1==1){
+		while(children.size()!=0){
+			newState = new State(state,state.getBoardLength());
 			degrees.clear();
 			int val = children.get(children.size()-1).getMrv();
 			while(children.get(children.size()-1).getMrv()==val) {
@@ -153,16 +147,19 @@ public class HW6 {
 				child.print();
 			}
 			for(Position child: degrees) {
+				newState = new State(state,state.getBoardLength());
 				if(newState.markPosition(newState.getBoard(), child.getX(), child.getY(), 'X')==true){
+					
 					if(newState.isGameWon()) {
 						return newState;
 					}
-					return backtracking(newState);
+					State result = backtracking(newState);
+					if(result!=null) {
+						return result;
+					}
 				}
 			}
-			if(children.size()==0){
-				return null;
-			}
 		}
+		return null;
 	}
 }
